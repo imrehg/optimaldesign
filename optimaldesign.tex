@@ -1,11 +1,11 @@
-\documentclass[draft,12pt]{iopart}
+\documentclass[12pt]{iopart}
 \usepackage{graphicx}
 \usepackage{iopams}
 \begin{document}
 \article[Optimal design for spectroscopy]{TECHNICAL DESIGN NOTE}{Optimal design for spectroscopy}
-\author{G Imreh}
+\author{G Imreh and W-Y Cheng}
 \address{Institute of Atomic and Molecular Sciences, Academia Sinica, Taiwan}
-\ead{imrehg@gmail.com}
+\ead{\mailto{imrehg@gmail.com}}
 \begin{abstract}
 Optimal design methodology for spectroscopy and other fitted things.
 \end{abstract}
@@ -15,7 +15,135 @@ Optimal design methodology for spectroscopy and other fitted things.
 \pacs{}
 \submitto{\MST}
 
+\section{Introduction}
+
+
+
 Let's discuss some ideas how to make a better spectroscopy measurement by the power of statistics \cite{Atkinson1992}.
+
+When doing measurements, one wants to get the best result with the smallest effort....
+
+
+
+
+\textbf{Overview/roadplan:}
+\begin{enumerate}
+\item Overview of optimal design
+\item Discrete support design function
+\item Extending to continuous support
+\item Overall optimization / selective optimization
+\item Algorithms
+\item Application to spectroscopy
+\end{enumerate}
+
+\section{Optimal design}
+Short introduction of linear regression using matrix algebra, only to show the notation in this paper. For more detailed explanation check any standard linear algebra text book. Measure $y_i$ at $x_i$ points ($i=1, \ldots, N$)
+\begin{equation}
+E[Y] = F \beta 
+\end{equation}
+where $Y$ is the $N \times 1$ vector of responses, $\beta$ is a $p \times 1$ vector of unknown parameters, and $F$ is the $N \times p$ extended design matrix. The $i$th row of $F$ is $f^T(x_i)$, a known function of the $m$ explanatory variables.
+
+Least squares regression is then:
+\begin{equation}
+\hat \beta = (F^T F)^{-1} F^T y
+\end{equation}
+The covariance matrix of the least squares estimates is
+\begin{equation}
+\mathrm{var} \hat \beta = \sigma^2 (F^T F)^{-1}
+\end{equation}
+
+
+\subsection{Obtimal design}
+Over $\xi$ is a continuous measure over $\mathcal{X}$. If $\xi$ has $n$ distinct points, then
+\begin{equation}
+\xi = \left\{ 
+  \begin{array}{l l l l}
+    x_1 & x_2 & \ldots & x_n\\
+    w_1 & w_2 & \ldots & w_n\\
+  \end{array} \right \}
+\end{equation}
+where $w_i$ is the weight of point $x_i$, $\int_{\mathcal{X}}\xi(dx) = 1$ and $0 \leq w_i \leq 1$ for every $i$.
+
+Exact design is for realizable integers for a given $N$.
+\begin{equation}
+\xi_N = \left\{ 
+  \begin{array}{l l l l}
+    x_1 & x_2 & \ldots & x_n\\
+    r_1/N & r_2/N & \ldots & r_n/N\\
+  \end{array} \right \}
+\end{equation}
+
+The N-trial design:
+\begin{equation}
+F^T F = \sum_{i=1}^N f(x_i) f(x_i)^T
+\end{equation}.
+The information matrix is
+\begin{equation}
+M(\xi) = \int_{\mathcal{X}} f(x)f^T(x) \xi(dx) = \sum_{i=1}^n f(x_i)f^T(x_i)w_i
+\end{equation}
+summing over the $n$ design points.
+For the exact design we have to scale as
+\begin{equation}
+M(\xi_N) = \frac{F^T F}{N}
+\end{equation}
+The variance of the response is given by
+\begin{equation}
+\mathrm{var}\{\hat y(x)\} = \sigma^2 f^T(x) M^{-1}(\xi) f(x)
+\end{equation}
+from where the standardized variance of the predicted response is
+\begin{equation}
+d(x, \xi) = f^T(x) M^{-1}(\xi) f(x)
+\end{equation}
+that is function of both $x$ where the prediction is made and the design $\xi$.
+
+Talk about the effect of singular matrices.
+
+There is no standard way to caulculate the optimal $\xi$ in general. There are methods developed (see citation, ...). One subset of methods is sequential design: adding points one-by-one, or removing points one-by-one. One practical method is outlined here:
+
+\begin{enumerate}
+\item Nonsingular start with $n$ points
+\item Calculate argmax $d(x, \xi_n)$ for $x \in \mathcal{X}$,
+\item Add that point to the bunch as $n+1$
+\item Repeat until algorithm converges
+\item Can throw away starting points
+\item Should have an approximate measure of the optimal $\xi^*$
+\end{enumerate}
+Works for any differentiable functions, even if only differentiable numerically.
+
+\subsection{Restricted optimal design}
+
+\begin{equation}
+d_s(x, \xi) = f^T(x) M^{-1}(\xi)f(x) - f_2^T(x) M_{22}^{-1}(\xi)f_2(x)
+\label{eq:dsvar}
+\end{equation}
+
+\subsection{Sub-obtimal design for robustness}
+
+Surprisingly robust, the $\hat \beta$ has to be very far from the true to lose power... Do simulation!
+
+\subsection{Finite sample size}
+
+$D_\mathrm{eff}$ gives approximate measure of the save effort.
+
+
+\subsection{Design for restricted parameter space}
+
+Doing the same method for restricting $\mathcal{X}$ is just as possible. 
+
+\subsection{Heterosadicity solved by GLM}
+\subsection{Model validation}
+
+\subsection{Imprecision of $\hat \beta$}
+
+How to calculate the predicted effect of imprecise parameters?
+
+\section{Example: Lorentzian spectral line}
+
+Example from spectroscopy.
+
+Parameters: centre $x_0$, width $\Gamma$, amplitude $A$ and background $B$. Overall optimal design (compare to uniform on a sensible range), check effect of $N \rightarrow \infty$, optimize for $x_0$ or $\gamma$ (compare to uniform), do the same for one-sided (ion trapping). calculate optimal/sub-optimal for imprecise $\hat x_0$ or $\hat\gamma$. Check compared to normal distribution (model fit)???
+
+\section{What have we learned?}
 
 \ack Thanks for the dudes and to the National Science Council of Taiwan.
 
