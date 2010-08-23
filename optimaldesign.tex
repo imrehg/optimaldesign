@@ -137,6 +137,18 @@ Doing the same method for restricting $\mathcal{X}$ is just as possible.
 
 How to calculate the predicted effect of imprecise parameters?
 
+\subsection(Functions of variables)
+
+\begin{equation}
+\mathrm{var}\left\{g(\hat \theta)\right\} = \mathrm{var}(c^T \hat \beta) = c^T M^{-1}(\xi) c
+\end{equation}
+where $c$ is a $p \times 1$ vector of known constans. Generally, it can be defined from the Tailor expansion:
+\begin{equation}
+c_i(\theta) = \frac{\partial g(\theta)}{\partial \theta_i}
+\end{equation}
+
+Have to be careful, though, because the model can be singular. For linear models this means maybe only linear combinations of parameters can be estimated, for nonlinear models it is possible that the parameter won't be observable. Care needed!
+
 \section{Example: Lorentzian spectral line}
 
 Example from spectroscopy.
