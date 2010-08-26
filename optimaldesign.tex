@@ -17,15 +17,15 @@ Optimal design methodology for spectroscopy and other fitted things.
 
 \section{Introduction}
 
-Experiments are not limited to the physical sciences, but many areas of science, even industry makes use of them: a process is described by a mathematical model and repeated observations are used to evaluate the model and estimate its free parameters. When designing an experiment, the most common aims are the ability to estimate the model parameters without bias and as well as possible, ability to detect lack of fit, and to use the fewest number of observations\cite{Box1975,Box1987}. The last aim is often considered secondary in physical experiments, however as this note will show, the three aims are interconnected. 
+Experiments are not limited to the physical sciences, but many areas of science, even industry makes use of them: a process is described by a mathematical model and repeated observations are used to evaluate the model and estimate its free parameters. When designing an experiment, the most common aims are the ability to estimate the model parameters without bias and as well as possible, ability to detect lack of fit, and to use the fewest number of observations \cite{Box1975,Box1987}. The last aim is often considered secondary in physical experiments, however as this note will show, the three aims are interconnected.
 
-The possible input parameters for an experiment form the $\mathcal{X}$ design region. From $\mathcal{X}$ one chooses $N$ points $x_i$, $i = 1, \ldots, N$ to conduct the experiment. Using optimal experimental design (OED) theory, with different choices of $x_i$ one can adjust the experiment towards different goals: overall best estimate of the model parameters, best estimate (smallest variance) of a subset of important parameters at the expence of others, best estimate of a function of the model parameters, most sensitive lack-of-fit measure. The list is by no means exhausive, but represent the most common cases in physics experiments. Most researchers spread the observations uniformly in the region of interest, which is often sub-optimal in all criteria. OED is a rich area of statistics, mostly used in medical research and industrial quality control, mainly due to those fields close connection to statistics, not because of the lack relevance to other fields. There were previous efforts to use OED for physics, such as optimal measurement of processes described by differential equations, e.g. the placement of temperature sensors in heat conductivity experiments\cite{Emery1998}. This note hopes to introduce the methodology of OED for model parameter estimation (fitting), examine its suitability for physical experiments and give examples to help implementation.
+The possible input parameters for an experiment form the $\mathcal{X}$ design region. From $\mathcal{X}$ one chooses $N$ points $x_i$, $i = 1, \ldots, N$ to conduct the experiment. Using optimal experimental design (OED) theory, with different choices of $x_i$ one can adjust the experiment towards different goals: overall best estimate of the model parameters, best estimate (smallest variance) of a subset of important parameters at the expence of others, best estimate of a function of the model parameters, most sensitive lack-of-fit measure. The list is by no means exhausive, but represent the most common cases in physics experiments. Most researchers spread the observations uniformly in the region of interest, which is often sub-optimal in all criteria. OED is a rich area of statistics, mostly used in medical research and industrial quality control, mainly due to those fields close connection to statistics, not because of the lack relevance to other fields. There were previous efforts to use OED for physics, such as optimal measurement of processes described by differential equations, e.g. the placement of temperature sensors in heat conductivity experiments \cite{Emery1998}. This note hopes to introduce the methodology of OED for model parameter estimation (fitting), examine its suitability for physical experiments and give examples to help implementation.
 
 
 \section{Optimal design}
 Short introduction of linear regression using matrix algebra, only to show the notation in this paper. For more detailed explanation check any standard linear algebra text book. Measure $y_i$ at $x_i$ points ($i=1, \ldots, N$)
 \begin{equation}
-E[Y] = F \beta 
+E[Y] = F \beta
 \end{equation}
 where $Y$ is the $N \times 1$ vector of responses, $\beta$ is a $p \times 1$ vector of unknown parameters, and $F$ is the $N \times p$ extended design matrix. The $i$th row of $F$ is $f^T(x_i)$, a known function of the $m$ explanatory variables.
 
@@ -42,7 +42,7 @@ The covariance matrix of the least squares estimates is
 \subsection{Obtimal design}
 Over $\xi$ is a continuous measure over $\mathcal{X}$. If $\xi$ has $n$ distinct points, then
 \begin{equation}
-\xi = \left\{ 
+\xi = \left\{
   \begin{array}{l l l l}
     x_1 & x_2 & \ldots & x_n\\
     w_1 & w_2 & \ldots & w_n\\
@@ -52,7 +52,7 @@ where $w_i$ is the weight of point $x_i$, $\int_{\mathcal{X}}\xi(dx) = 1$ and $0
 
 Exact design is for realizable integers for a given $N$.
 \begin{equation}
-\xi_N = \left\{ 
+\xi_N = \left\{
   \begin{array}{l l l l}
     x_1 & x_2 & \ldots & x_n\\
     r_1/N & r_2/N & \ldots & r_n/N\\
@@ -116,7 +116,7 @@ Surprisingly robust, the $\hat \beta$ has to be very far from the true to lose p
 
 \subsection{Finite sample size}
 
-The relative D-efficiency of two models $\xi_1$ and $x_2$ is defined as 
+The relative D-efficiency of two models $\xi_1$ and $x_2$ is defined as
 \begin{equation}
 D_\mathrm{eff} = \left\{\frac{M(\xi_1)}{M(\xi_2)}\right\}^{1/p}
 \end{equation}
@@ -126,12 +126,12 @@ In this paper, thus we can set $\xi_1$ to the uniform distribution of measuremen
 
 \subsection{Design for restricted parameter space}
 
-Doing the same method for restricting $\mathcal{X}$ is just as possible. 
+Doing the same method for restricting $\mathcal{X}$ is just as possible.
 
 \subsection{Heterosadicity solved by GLM}
 \subsection{Model validation}
 
-Maximize the lack-of fit parameter: T-optimization (as "test"). If there are $p_1$ and $p_2$ 
+Maximize the lack-of fit parameter: T-optimization (as "test"). If there are $p_1$ and $p_2$
 
 \subsection{Imprecision of $\hat \beta$}
 
@@ -179,23 +179,23 @@ E[Y] &=& \beta F
 \end{eqnarray}
 where the coefficients are
 \begin{equation}
-\beta = \left[ 
+\beta = \left[
   \begin{array}{l}
     x_0 - \hat x_0 \\
     \Gamma - \hat \Gamma\\
     I - \hat I \\
-  \end{array} \right ] 
+  \end{array} \right ]
 \end{equation}
  and the $i$th row of $F$ is
 \begin{equation}
- f^T(x_i) = \left[ 
+ f^T(x_i) = \left[
   \begin{array}{l l l}
    \frac{\partial \eta(x_i)}{\partial x_0} & \frac{\partial \eta(x_i)}{\partial \Gamma} & \frac{\partial \eta(x_i)}{\partial I}
   \end{array} \right ]
 \end{equation}
-Without loss of generalization we can set $\hat x_0 = 0$, $\hat \Gamma = 1$, $\hat I = 1$, since the $x$ and $y$ range can always be rescaled to these values. Then we can look for the optimal design in the form of 
+Without loss of generalization we can set $\hat x_0 = 0$, $\hat \Gamma = 1$, $\hat I = 1$, since the $x$ and $y$ range can always be rescaled to these values. Then we can look for the optimal design in the form of
 \begin{equation}
-\xi = \left\{ 
+\xi = \left\{
   \begin{array}{c c c}
     -a & 0 & a\\
     \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
@@ -203,13 +203,13 @@ Without loss of generalization we can set $\hat x_0 = 0$, $\hat \Gamma = 1$, $\h
 \end{equation}
 since our original function is symmetric with respect to 0 (hence $-a$ and $a$) and $\mathcal{X}~=~\mathbb{R}$ (thus the number of design points equal the dimension of $\beta$, with equal weights). Under these considetations we can calculate the information matrix $M$ as in \eref{eq:infcont}. The maximum of the determinat is found by differentiating with respect to $a$ and finding the roots. The calculation is straightforward but lengthy, thus we only quote the result of $a~\approx~0.7746$. This analytical method can cumbersome except for the simplest models (even with the available symbolic mathematic software). On the other hand, the sequential method of finding the correct parameters is much less intensive computationally. Let's start with a design of $x = [-1, 0, 1]$ which is still symetric and equal probability, but this is just to speed up the convergence of the algorithm. Any other $n \geq 3$ number for which $M$ is not singular could be chosen as a starting point. Then the sequential algorithms will create the following set of design points:
 \begin{equation}
-    -1, 0, 1, 0.5772, -0.5772, 0, -0.7886,\ldots,0,-0.7746,0.7746,\ldots
+    -1, 0, 1, 0.577, -0.577, 0, -0.789,\ldots,0,-0.775,0.775,\ldots
 \end{equation}
-where the final ``$\ldots$'' just repeats the $0,-0.7746,0.7746$ sequence. We can then ignore the starting values and conclude that are design should be
+where the final ``$\ldots$'' just repeats the $0,-0.775,0.775$ sequence. We can then ignore the starting values and conclude that are design should be
 \begin{equation}
-\xi = \left\{ 
+\xi = \left\{
   \begin{array}{c c c}
-    -0.7746 & 0 & 0.7746\\
+    -0.775 & 0 & 0.775\\
     \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
   \end{array} \right \}
 \label{eq:lorentzxi1}
@@ -221,7 +221,7 @@ If we want to compare the the efficiency of the usual uniformly distributed $x$ 
 
 If we optimize the model \eref{eq:lorentz3} for the measurement of the centre position $x_0$, the optimal measure becomes
 \begin{equation}
-\xi^*_{x_0} = \left\{ 
+\xi^*_{x_0} = \left\{
   \begin{array}{c c}
     -0.576 & 0.576 \\
     \frac{1}{2} & \frac{1}{2}\\
@@ -231,7 +231,7 @@ which has fewer number of points than the original model, thus while the centre 
 
 Optimization for the with yields
 \begin{equation}
-\xi^*_{\Gamma} = \left\{ 
+\xi^*_{\Gamma} = \left\{
   \begin{array}{c c c}
     -1.188 & 0 &  1.188 \\
     0.353 & 0.294 & 0.354\\
@@ -242,7 +242,7 @@ which has necessarily 3-point support for $\Gamma$ to be observable, though with
 
 The optimal measurement of the $I$ height is again different and highlights the need for validating the final design buy calculating $d(x, \xi)$ over the design region. If one just follows the sequential method, calculating a number of measurement point, then throwing away a fraction of the initial ones as ``not-yet converged'' region, the final design measure would be
 \begin{equation}
-\xi_{I} = \left\{ 
+\xi_{I} = \left\{
   \begin{array}{c c}
     -1 &  1 \\
     0.5 & 0.5\\
@@ -250,7 +250,7 @@ The optimal measurement of the $I$ height is again different and highlights the 
 \end{equation}
 Clearly with this measure the height is not observable, as there are an infinite number of curves with different $\Gamma$ and $I$ going threw them. Checking the standardized variance $\max d(x, \xi) = 4$, which is larger than the number of parameters $p = 1$ in this case. The maximum occurs at $x = 0$, giving a clue, that we have to have at least one measurement at the centre. Including even one more measurement there will bring $\max d(x, \xi) \approx 1$, signalling the approximate optimality of this design. Thus, the final measure can be written as
 \begin{equation}
-\xi^*_{I} = \left\{ 
+\xi^*_{I} = \left\{
   \begin{array}{c c c}
     -1 & 0 &  1 \\
     0.5-\epsilon/2 & \epsilon & 0.5-\epsilon/2\\
@@ -262,7 +262,7 @@ where $\epsilon$ has to be chosen so that $N \epsilon \geq 1$ for the $N$ measur
 
 The design region can be restricted for any reason. For example in ion trapping experiments generally the frequency is confined to $x < x_0$ as tuning to the positive side of the centre will result in completely different model of interaction. Let's restrict our region to $\mathcal{X} = [-\infty, 0]$ (where $x_0 = 0$ is implicit), the sequential algorithm gives
 \begin{equation}
-\xi^* = \left\{ 
+\xi^* = \left\{
   \begin{array}{c c c}
     -1.285 & -0.395 &  0 \\
      \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
@@ -283,14 +283,14 @@ The corresponding term in the design matrix $f$ will be
 \end{equation}
 which is independent of $x$. This has the consequence, that we can no longer have unrestricted $\mathcal{X}$, as at $x~\rightarrow~\infty$ we also have $d(x,\xi)~\rightarrow~\infty$. Also, the optimal design $\xi$ will be independent of the estimate of $\hat n$ (which is not true for the other parameter estimates). Our design matrix has rows of
 \begin{equation}
- f^T(x_i) = \left[ 
+ f^T(x_i) = \left[
   \begin{array}{l l l l}
    \frac{\partial \eta(x_i)}{\partial x_0} & \frac{\partial \eta(x_i)}{\partial \Gamma} & \frac{\partial \eta(x_i)}{\partial I} & \frac{\partial \eta(x_i)}{\partial \eta_0}
   \end{array} \right ]
 \end{equation}
 For design region $\mathcal{X} = [-2, 2]$ the sequential algorithm results in design measure of
 \begin{equation}
-\xi^* = \left\{ 
+\xi^* = \left\{
   \begin{array}{c c c c c}
     -2 & -0.716 & 0 & 0.716 & 2\\
     \frac{1}{8} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{8}\\
@@ -298,7 +298,7 @@ For design region $\mathcal{X} = [-2, 2]$ the sequential algorithm results in de
 \end{equation}
 whic has now a higher number of support points than control parameters $p$. When checking this measure for D-optimality, however, the equality $d(x, \xi) = p$ still holds at all support points. Compared to the uniform distribution on the same interval, $D_\mathrm{eff} = 0.728$. If the design region is extended to $\mathcal{X} = [-3, 3]$ the optimal measure becomes
 \begin{equation}
-\xi^* = \left\{ 
+\xi^* = \left\{
   \begin{array}{c c c c c}
     -3 & -0.748 & 0 & 0.748 & 3\\
     \frac{1}{8} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{8}\\
