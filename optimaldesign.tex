@@ -96,6 +96,12 @@ d(x, \xi) = f^T(x) M^{-1}(\xi) f(x)
 \end{equation}
 that is function of both $x$ where the prediction is made and the design $\xi$.
 
+D-optimal design (as "determinant"): $|F^T F|$ is maximal.
+One practical testing method whether one found the D-optimal design: for D-optimality, $d(x, \xi) \leq p$, with equality at the design points.
+Works for any differentiable functions, even if only differentiable numerically.
+
+If $\mathcal{X} = \mathbb{R}$ then $\xi$ has $p$ support points, and all of them have equal weight. If $\mathcal{X} \subsetneq \mathbb{R}$ then $n \geq p$, and might have unequal weights.
+
 Talk about the effect of singular matrices.
 
 There is no standard way to caulculate the optimal $\xi$ in general. There are methods developed (see citation, ...). One subset of methods is sequential design: adding points one-by-one, or removing points one-by-one. One practical method is outlined here:
@@ -123,8 +129,13 @@ Surprisingly robust, the $\hat \beta$ has to be very far from the true to lose p
 
 \subsection{Finite sample size}
 
-$D_\mathrm{eff}$ gives approximate measure of the save effort.
+The relative D-efficiency of two models $\xi_1$ and $x_2$ is defined as 
+\begin{equation}
+D_\mathrm{eff} = \left\{\frac{M(\xi_1)}{M(\xi_2)}\right\}^{1/p}
+\end{equation}
+which results in an efficiency measure which is proportional to the design size, irrespective to the dimension of the model. Thus e.g. $D_\mathrm{eff} = 0.5$ means that $1 / D_\mathrm{eff} = 2$ replicates of design measure $\xi_1$ would be as efficient as one replicate of $\xi_2$.
 
+In this paper, thus we can set $\xi_1$ to the uniform distribution of measurement points, and compare optimized versions of $\xi_2$ to that.
 
 \subsection{Design for restricted parameter space}
 
@@ -133,11 +144,15 @@ Doing the same method for restricting $\mathcal{X}$ is just as possible.
 \subsection{Heterosadicity solved by GLM}
 \subsection{Model validation}
 
+Maximize the lack-of fit parameter: T-optimization (as "test"). If there are $p_1$ and $p_2$ 
+
 \subsection{Imprecision of $\hat \beta$}
 
 How to calculate the predicted effect of imprecise parameters?
 
-\subsection(Functions of variables)
+\subsection{Functions of variables}
+
+C-optimum design (as "constans"):
 
 \begin{equation}
 \mathrm{var}\left\{g(\hat \theta)\right\} = \mathrm{var}(c^T \hat \beta) = c^T M^{-1}(\xi) c
