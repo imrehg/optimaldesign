@@ -13,28 +13,14 @@ Optimal design methodology for spectroscopy and other fitted things.
 \noindent{\it Keywords\/}:
 
 \pacs{}
-\submitto{\MST}
+%%\submitto{\MST}
 
 \section{Introduction}
 
+Experiments are not limited to the physical sciences, but many areas of science, even industry makes use of them: a process is described by a mathematical model and repeated observations are used to evaluate the model and estimate its free parameters. When designing an experiment, the most common aims are the ability to estimate the model parameters without bias and as well as possible, ability to detect lack of fit, and to use the fewest number of observations\cite{Box1975,Box1987}. The last aim is often considered secondary in physical experiments, however as this note will show, the three aims are interconnected. 
 
+The possible input parameters for an experiment form the $\mathcal{X}$ design region. From $\mathcal{X}$ one chooses $N$ points $x_i$, $i = 1, \ldots, N$ to conduct the experiment. Using optimal experimental design (OED) theory, with different choices of $x_i$ one can adjust the experiment towards different goals: overall best estimate of the model parameters, best estimate (smallest variance) of a subset of important parameters at the expence of others, best estimate of a function of the model parameters, most sensitive lack-of-fit measure. The list is by no means exhausive, but represent the most common cases in physics experiments. Most researchers spread the observations uniformly in the region of interest, which is often sub-optimal in all criteria. OED is a rich area of statistics, mostly used in medical research and industrial quality control, mainly due to those fields close connection to statistics, not because of the lack relevance to other fields. There were previous efforts to use OED for physics, such as optimal measurement of processes described by differential equations, e.g. the placement of temperature sensors in heat conductivity experiments\cite{Emery1998}. This note hopes to introduce the methodology of OED for model parameter estimation (fitting), examine its suitability for physical experiments and give examples to help implementation.
 
-Let's discuss some ideas how to make a better spectroscopy measurement by the power of statistics \cite{Atkinson1992}.
-
-When doing measurements, one wants to get the best result with the smallest effort....
-
-
-
-
-\textbf{Overview/roadplan:}
-\begin{enumerate}
-\item Overview of optimal design
-\item Discrete support design function
-\item Extending to continuous support
-\item Overall optimization / selective optimization
-\item Algorithms
-\item Application to spectroscopy
-\end{enumerate}
 
 \section{Optimal design}
 Short introduction of linear regression using matrix algebra, only to show the notation in this paper. For more detailed explanation check any standard linear algebra text book. Measure $y_i$ at $x_i$ points ($i=1, \ldots, N$)
@@ -80,6 +66,7 @@ F^T F = \sum_{i=1}^N f(x_i) f(x_i)^T
 The information matrix is
 \begin{equation}
 M(\xi) = \int_{\mathcal{X}} f(x)f^T(x) \xi(dx) = \sum_{i=1}^n f(x_i)f^T(x_i)w_i
+\label{eq:infcont}
 \end{equation}
 summing over the $n$ design points.
 For the exact design we have to scale as
@@ -166,9 +153,66 @@ Have to be careful, though, because the model can be singular. For linear models
 
 \section{Example: Lorentzian spectral line}
 
-Example from spectroscopy.
+The following examples of optimal design are based on spectroscopic experiments, but should be general enough to provide guidance for any other models.
 
-Parameters: centre $x_0$, width $\Gamma$, amplitude $A$ and background $B$. Overall optimal design (compare to uniform on a sensible range), check effect of $N \rightarrow \infty$, optimize for $x_0$ or $\gamma$ (compare to uniform), do the same for one-sided (ion trapping). calculate optimal/sub-optimal for imprecise $\hat x_0$ or $\hat\gamma$. Check compared to normal distribution (model fit)???
+In this hypothetical experiment we are trying to measure an atomic fluorescence lineshape of simple system, a Lorentzian function of the excitation light frequency:
+\begin{equation}
+\eta(x) = I \frac{\Gamma}{(x - x_0)^2 + \Gamma^2}
+\end{equation}
+where $I$ is the height of the peak, $x_0$ is the centre frequency and $\Gamma$ is the half-with at half maximum. The partial derivatives for the Taylor-expanson are
+\begin{eqnarray}
+\frac{\partial \eta(x)}{\partial x_0} &=& I \frac{2 \Gamma (x - x_0)}{\left[(x - x_0)^2 + \Gamma^2\right]^2} \\
+\frac{\partial \eta(x)}{\partial \Gamma} &=& I \frac{(x - x_0)^2 - \Gamma^2}{\left[(x - x_0)^2 + \Gamma^2\right]^2} \\
+\frac{\partial \eta(x)}{\partial I} &=& \frac{\Gamma}{(x - x_0)^2 + \Gamma^2}
+\end{eqnarray}
+from which, our linearized model will be
+\begin{equation}
+E[y] = \eta(x) + (x_0 - \hat x_0) \frac{\partial \eta(x)}{\partial x_0} + (\Gamma - \hat \Gamma) \frac{\partial \eta(x)}{\partial \Gamma} + (I - \hat I) \frac{\partial \eta(x)}{\partial I}
+\end{equation}
+that can be reorganized as
+\begin{eqnarray}
+E[y] - \eta(x) &=& (x_0 - \hat x_0) \frac{\partial \eta(x)}{\partial x_0} + (\Gamma - \hat \Gamma) \frac{\partial \eta(x)}{\partial \Gamma} + (I - \hat I) \frac{\partial \eta(x)}{\partial I}  \nonumber \\
+E[Y] &=& \beta F
+\end{eqnarray}
+where the coefficients are
+\begin{equation}
+\beta = \left[ 
+  \begin{array}{l}
+    x_0 - \hat x_0 \\
+    \Gamma - \hat \Gamma\\
+    I - \hat I \\
+  \end{array} \right ] 
+\end{equation}
+ and the $i$th row of $F$ is
+\begin{equation}
+ f^T(x_i) = \left[ 
+  \begin{array}{l l l}
+   \frac{\partial \eta(x_i)}{\partial x_0} & \frac{\partial \eta(x_i)}{\partial \Gamma} & \frac{\partial \eta(x_i)}{\partial I}
+  \end{array} \right ]
+\end{equation}
+Without loss of generalization we can set $\hat x_0 = 0$, $\hat \Gamma = 1$, $\hat I = 1$, since the $x$ and $y$ range can always be rescaled to these values. Then we can look for the optimal design in the form of 
+\begin{equation}
+\xi = \left\{ 
+  \begin{array}{c c c}
+    -a & 0 & a\\
+    \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
+  \end{array} \right \}
+\end{equation}
+since our original function is symmetric with respect to 0 (hence $-a$ and $a$) and $\mathcal{X}~=~\mathbb{R}$ (thus the number of design points equal the dimension of $\beta$, with equal weights). Under these considetations we can calculate the information matrix $M$ as in \eref{eq:infcont}. The maximum of the determinat is found by differentiating with respect to $a$ and finding the roots. The calculation is straightforward but lengthy, thus we only quote the result of $a~\approx~0.7746$. This analytical method can cumbersome except for the simplest models (even with the available symbolic mathematic software). On the other hand, the sequential method of finding the correct parameters is much less intensive computationally. Let's start with a design of $x = [-1, 0, 1]$ which is still symetric and equal probability, but this is just to speed up the convergence of the algorithm. Any other $n \geq 3$ number for which $M$ is not singular could be chosen as a starting point. Then the sequential algorithms will create the following set of design points:
+\begin{equation}
+    -1, 0, 1, 0.5772, -0.5772, 0, -0.7886,\ldots,0,-0.7746,0.7746,\ldots
+\end{equation}
+where the final ``$\ldots$'' just repeats the $0,-0.7746,0.7746$ sequence. We can then ignore the starting values and conclude that are design should be
+\begin{equation}
+\xi = \left\{ 
+  \begin{array}{c c c}
+    -0.7746 & 0 & 0.7746\\
+    \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
+  \end{array} \right \}
+\end{equation}
+In the case when $\mathcal{X}$ is restricted it is possible that we have more than $p$ number of support for our final design and they won't have equal weights, thus a frequency analysis of the output of the sequential design is needed.
+
+
 
 \section{What have we learned?}
 
