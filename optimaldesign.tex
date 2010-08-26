@@ -153,11 +153,14 @@ Have to be careful, though, because the model can be singular. For linear models
 
 \section{Example: Lorentzian spectral line}
 
+\subsection{3-parameter unrestricted model}
+
 The following examples of optimal design are based on spectroscopic experiments, but should be general enough to provide guidance for any other models.
 
 In this hypothetical experiment we are trying to measure an atomic fluorescence lineshape of simple system, a Lorentzian function of the excitation light frequency:
 \begin{equation}
 \eta(x) = I \frac{\Gamma}{(x - x_0)^2 + \Gamma^2}
+\label{eq:lorentz3}
 \end{equation}
 where $I$ is the height of the peak, $x_0$ is the centre frequency and $\Gamma$ is the half-with at half maximum. The partial derivatives for the Taylor-expanson are
 \begin{eqnarray}
@@ -209,12 +212,104 @@ where the final ``$\ldots$'' just repeats the $0,-0.7746,0.7746$ sequence. We ca
     -0.7746 & 0 & 0.7746\\
     \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
   \end{array} \right \}
+\label{eq:lorentzxi1}
 \end{equation}
-In the case when $\mathcal{X}$ is restricted it is possible that we have more than $p$ number of support for our final design and they won't have equal weights, thus a frequency analysis of the output of the sequential design is needed.
+In the case when $\mathcal{X}$ is restricted it is possible that we have more than $p$ number of support for our final design and they won't have equal weights, thus a frequency analysis of the output of the sequential design algorithm is needed.
+If we want to compare the the efficiency of the usual uniformly distributed $x$ values to the design of \eref{eq:lorentzxi1} for the same number of measurements, we have to choose a limited region for the uniform distribution. With $\mathcal{X} = [-2, 2]$ we have $D_\mathrm{eff} = 0.755$ (thus the optimal design would need $\approx 25\%$ less measurements for the same level of accuracy), while with $\mathcal{X} =[-3, 3]$ (which is still a sensible range for a uniformly distributed measurement) it is $D_\mathrm{eff} = 0.548$.
+
+\subsection{Optimizing for individual parameters}
+
+If we optimize the model \eref{eq:lorentz3} for the measurement of the centre position $x_0$, the optimal measure becomes
+\begin{equation}
+\xi^*_{x_0} = \left\{ 
+  \begin{array}{c c}
+    -0.576 & 0.576 \\
+    \frac{1}{2} & \frac{1}{2}\\
+  \end{array} \right \}
+\end{equation}
+which has fewer number of points than the original model, thus while the centre is obviously measurable, the width and hight is not observable anymore.  On $\mathcal{X} = [-2,2]$ the efficiency is $D_\mathrm{eff} = 0.449$.
+
+Optimization for the with yields
+\begin{equation}
+\xi^*_{\Gamma} = \left\{ 
+  \begin{array}{c c c}
+    -1.188 & 0 &  1.188 \\
+    0.353 & 0.294 & 0.354\\
+  \end{array} \right \}
+\end{equation}
+which has necessarily 3-point support for $\Gamma$ to be observable, though with reduced weight for the middle. On $\mathcal{X} = [-2,2]$ the efficiency is $D_\mathrm{eff} = 0.609$.
 
 
+The optimal measurement of the $I$ height is again different and highlights the need for validating the final design buy calculating $d(x, \xi)$ over the design region. If one just follows the sequential method, calculating a number of measurement point, then throwing away a fraction of the initial ones as ``not-yet converged'' region, the final design measure would be
+\begin{equation}
+\xi_{I} = \left\{ 
+  \begin{array}{c c}
+    -1 &  1 \\
+    0.5 & 0.5\\
+  \end{array} \right \}
+\end{equation}
+Clearly with this measure the height is not observable, as there are an infinite number of curves with different $\Gamma$ and $I$ going threw them. Checking the standardized variance $\max d(x, \xi) = 4$, which is larger than the number of parameters $p = 1$ in this case. The maximum occurs at $x = 0$, giving a clue, that we have to have at least one measurement at the centre. Including even one more measurement there will bring $\max d(x, \xi) \approx 1$, signalling the approximate optimality of this design. Thus, the final measure can be written as
+\begin{equation}
+\xi^*_{I} = \left\{ 
+  \begin{array}{c c c}
+    -1 & 0 &  1 \\
+    0.5-\epsilon/2 & \epsilon & 0.5-\epsilon/2\\
+  \end{array} \right \}
+\end{equation}
+where $\epsilon$ has to be chosen so that $N \epsilon \geq 1$ for the $N$ measurements. On $\mathcal{X} = [-2,2]$ the efficiency is $D_\mathrm{eff} = 0.579$.
+
+\subsection{Restricted design region}
+
+The design region can be restricted for any reason. For example in ion trapping experiments generally the frequency is confined to $x < x_0$ as tuning to the positive side of the centre will result in completely different model of interaction. Let's restrict our region to $\mathcal{X} = [-\infty, 0]$ (where $x_0 = 0$ is implicit), the sequential algorithm gives
+\begin{equation}
+\xi^* = \left\{ 
+  \begin{array}{c c c}
+    -1.285 & -0.395 &  0 \\
+     \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
+  \end{array} \right \}
+\end{equation}
+On $\mathcal{X} = [-2,0]$ the efficiency is $D_\mathrm{eff} = 0.622$. On the restricted region the optimal design has higher efficiency gain compared the uniformly distributed measurements than when the region is not restricted.
+
+\subsection{4-parameter, restricted model}
+
+Our spectroscopy measurement might include a background (or couldn't substract a known value from our measurements), thus the model of \eref{eq:lorentz3} needs to be extended:
+\begin{equation}
+\eta(x) = I \frac{\Gamma}{(x - x_0)^2 + \Gamma^2} + \eta_0
+\label{eq:lorentz4}
+\end{equation}
+The corresponding term in the design matrix $f$ will be
+\begin{equation}
+\frac{\partial \eta(x)}{\partial \eta_0} = 1
+\end{equation}
+which is independent of $x$. This has the consequence, that we can no longer have unrestricted $\mathcal{X}$, as at $x~\rightarrow~\infty$ we also have $d(x,\xi)~\rightarrow~\infty$. Also, the optimal design $\xi$ will be independent of the estimate of $\hat n$ (which is not true for the other parameter estimates). Our design matrix has rows of
+\begin{equation}
+ f^T(x_i) = \left[ 
+  \begin{array}{l l l l}
+   \frac{\partial \eta(x_i)}{\partial x_0} & \frac{\partial \eta(x_i)}{\partial \Gamma} & \frac{\partial \eta(x_i)}{\partial I} & \frac{\partial \eta(x_i)}{\partial \eta_0}
+  \end{array} \right ]
+\end{equation}
+For design region $\mathcal{X} = [-2, 2]$ the sequential algorithm results in design measure of
+\begin{equation}
+\xi^* = \left\{ 
+  \begin{array}{c c c c c}
+    -2 & -0.716 & 0 & 0.716 & 2\\
+    \frac{1}{8} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{8}\\
+  \end{array} \right \}
+\end{equation}
+whic has now a higher number of support points than control parameters $p$. When checking this measure for D-optimality, however, the equality $d(x, \xi) = p$ still holds at all support points. Compared to the uniform distribution on the same interval, $D_\mathrm{eff} = 0.728$. If the design region is extended to $\mathcal{X} = [-3, 3]$ the optimal measure becomes
+\begin{equation}
+\xi^* = \left\{ 
+  \begin{array}{c c c c c}
+    -3 & -0.748 & 0 & 0.748 & 3\\
+    \frac{1}{8} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{8}\\
+  \end{array} \right \}
+\end{equation}
+with $D_\mathrm{eff} = 0.641$.
 
 \section{What have we learned?}
+
+It is possible to optimize and in the same time simplify the experiment but care has to be taken. Not for D-optimality but for other types the design has to be recalculated - though it is surprisingly resiliant to change (given the fact that there are not too many different points under measurement). Also, the verification of the model is essential. All can be automated, though. Depending on the model one can achieve significant gains in efficiency, especially when optimizing for a subset of parameters. This method does augment the normal experimental procedures, but does not replace them. The systematic effects (e.g. parameter drift) could have more complicated effect on the model, thus if suspect of such effects taking place, mapping time onto the fited parameters could be not completely straightforward
+
 
 \ack Thanks for the dudes and to the National Science Council of Taiwan.
 
