@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 \usepackage{iopams}
 \begin{document}
-\article[Optimal design for spectroscopy]{TECHNICAL DESIGN NOTE}{Optimal design for spectroscopy}
+\article[Optimal design for fitting experimental data]{TECHNICAL DESIGN NOTE}{Optimal design for fitting experimental data}
 %%\author{G Imreh and W-Y Cheng}
 \address{Institute of Atomic and Molecular Sciences, Academia Sinica, Taiwan}
 %%\ead{\mailto{imrehg@gmail.com}}
@@ -228,6 +228,9 @@ If we optimize the model \eref{eq:lorentz3} for the measurement of the centre po
   \end{array} \right \}
 \end{equation}
 which has fewer number of points than the original model, thus while the centre is obviously measurable, the width and hight is not observable anymore.  On $\mathcal{X} = [-2,2]$ the efficiency is $D_\mathrm{eff} = 0.449$.
+
+This is however not very robust. Can increase robustness with finite-$\sigma$ design, or based on comparison with the D-optimal design (i.e. inserting a point at $x=0$).
+
 
 Optimization for the with yields
 \begin{equation}
