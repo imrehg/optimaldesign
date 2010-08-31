@@ -490,7 +490,7 @@ for n in ntest:
     xt = xold[:n]
     pg = dofit(gauss, xt, lorentz(p, xt), p).beta
     res = append(res, sum((lorentz(p, xt)-gauss(pg, xt))**2)/len(xt))
-pl.plot(ntest, res/7.32e-3, '.')
+pl.plot(ntest, res/7.32e-3, 'k.')
 pl.ylim([0.6, 1])
 pl.xlabel(r'$N$')
 pl.ylabel(r'$\Delta_2(\xi_N) / \Delta_2(\xi^*)$')
