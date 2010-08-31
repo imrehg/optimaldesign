@@ -478,6 +478,27 @@ whic has now a higher number of support points than control parameters $p$. When
 \end{equation}
 with $D_\mathrm{eff} = 0.641$.
 
+\subsection{Discriminating Lorentzian and Gaussian}
+
+As an example for $T-optimal$ design for model selection, let's try to discriminate between a Lorentzian response (with the functional form of \eref{eq:lorentz3}) and a Gaussian function,
+\begin{equation}
+\eta_G(x) = \frac{A}{\sigma} \exp\left(-\frac{(x-x_0)^2}{2 \sigma^2}\right)
+\label{eq:gauss}
+\end{equation}
+where $A$ is the height, $\sigma$ is the half-width, and $x_0$ is the centre position. In this setting the two models differ in 4 parameters ($I$ and $\Gamma$ for the Lorentzian function, $A$ and $\sigma$ for the Gaussian), suggesting that the optimal design will have $4+1=5$ point support. For the example assume that the true distribution is a Lorentzian with $x_0 = 0$, $\Gamma = 1$  and $I = 1$. From a starting series of $[-2, -1, 0, 1, 2]$ the sequential algorithm results in a measure
+\begin{equation}
+\xi^* \approx \left\{
+  \begin{array}{c c c c c}
+    -2.74 & -0.96 & 0 & 0.96 & 2.73\\
+    0.301 & 0.126 & 0.146 & 0.126 & 0.301\\
+  \end{array} \right \}
+\label{eq:lorgauss}
+\end{equation}
+where the approximate equivalence means that the optimal measure is seen to be very sensitive to the support points and their weights, and \eref{eq:lorgauss} should be close as close to the optimal solution as it is possible with limited $N$ trials. \Fref{fig:lorgauss} shows how the Lorentzian, the best fitting Gaussian and the support points of \eref{eq:lorgauss}.
+
+
+Optimal $\Delta_2(\xi^*) \approx 7.3 \times 10^{-3}$
+
 \section{What have we learned?}
 
 It is possible to optimize and in the same time simplify the experiment but care has to be taken. Not for $D$-optimality but for other types the design has to be recalculated - though it is surprisingly resiliant to change (given the fact that there are not too many different points under measurement). Also, the verification of the model is essential. All can be automated, though. Depending on the model one can achieve significant gains in efficiency, especially when optimizing for a subset of parameters. This method does augment the normal experimental procedures, but does not replace them. The systematic effects (e.g. parameter drift) could have more complicated effect on the model, thus if suspect of such effects taking place, mapping time onto the fited parameters could be not completely straightforward
@@ -488,19 +509,45 @@ It is possible to optimize and in the same time simplify the experiment but care
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{fig1.eps}
+\caption{?}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{fig2.eps}
+\caption{?}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{fig3.eps}
+\caption{?}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{fig4.eps}
+\caption{?}
 \end{figure}
+
+\begin{figure}
+\includegraphics[width=0.9\textwidth]{fig5.eps}
+\caption{?}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.9\textwidth]{fig6.eps}
+\caption{Lorentzian ($x_0 = 0$, $\Gamma = 1$, $I = 1$, continuous line), best fitting Gaussian ($x_0 = 0$, $\sigma = 1.063$, $A = 0.971$, dashed line) and the $T$-optimal support points of \eref{eq:lorgauss} (vertical lines).}
+\label{fig:lorgauss}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.9\textwidth]{fig7.eps}
+\caption{?}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.9\textwidth]{fig8.eps}
+\caption{?}
+\end{figure}
+
 
 \section*{References}
 \bibliographystyle{unsrt}
