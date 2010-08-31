@@ -25,7 +25,6 @@ lorentz = lambda p, x: p[2] * p[1] / ((x-p[0])**2 + p[1]**2)
 
 nfig = 0
 ############# Figure: d(x, xi) vs x
-nfig += 1
 p = [0, 1, 1]
 xi = array([[-0.775, 0, 0.775], [1/3, 1/3, 1/3]])
 M1 = Mcontinuous(getf, p, xi)
@@ -61,7 +60,8 @@ pl.ylim([min(dx), 3.2])
 pl.xlabel(r'$x$')
 pl.ylabel(r'$d(x, \xi^*)$')
 # pl.legend(loc='lower center')
-pl.savefig('fig1.eps')
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 ############# Figure: D_eff vs N
 p = [0, 1, 1]
@@ -106,8 +106,8 @@ pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
 pl.plot(tt, res, 'k.')
 pl.xlabel(r'$N$')
 pl.ylabel(r'$D_\mathrm{eff}$')
-pl.savefig('fig2.eps')
-
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 ############# Figure: D_eff vs dx0
 
@@ -178,8 +178,8 @@ pl.xlim([xdif[0], xdif[-1]])
 pl.xlabel(r'$\Delta x_0$')
 pl.ylabel(r'$D_\mathrm{eff}$')
 pl.legend(loc='upper left')
-pl.savefig('fig3.eps')
-
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 
 
@@ -260,8 +260,8 @@ pl.xlabel(r"$\Gamma'$")
 pl.ylabel(r'$D_\mathrm{eff}$')
 # pl.legend(loc='lower right')
 # pl.show()
-pl.savefig('fig4.eps')
-
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 
 
@@ -338,8 +338,8 @@ pl.xlabel(r'$\Delta x_0$')
 pl.ylabel(r'$D_\mathrm{eff}$')
 pl.legend(loc='lower right')
 # pl.show()
-pl.savefig('fig5.eps')
-
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 # ############# Figure: Lorentz vs Gauss, design
 
@@ -394,8 +394,8 @@ pl.xlabel(r'$x$')
 pl.ylabel(r'$\eta(x)$')
 # pl.legend(loc='lower right')
 # pl.show()
-pl.savefig('fig6.eps')
-
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 # ############# Figure: Lorentz vs Gauss, residual
 
@@ -443,8 +443,8 @@ pl.xlabel(r'$x$')
 pl.ylabel(r'$\psi_2(x, \xi_N) (\times 10^{-3})$')
 # pl.legend(loc='lower right')
 # pl.show()
-pl.savefig('fig7.eps')
-
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 
 ############# Figure: Lorentz vs Gauss / efficiency
@@ -495,8 +495,8 @@ pl.ylim([0.6, 1])
 pl.xlabel(r'$N$')
 pl.ylabel(r'$\Delta_2(\xi_N) / \Delta_2(\xi^*)$')
 # pl.show()
-pl.savefig('fig8.eps')
-
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 
 
