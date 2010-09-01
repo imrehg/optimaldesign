@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ###
 # Optimal design with Lorentzian lineshape
 ###
@@ -24,6 +25,7 @@ def getf(p, x):
 
 lorentz = lambda p, x: p[2] * p[1] / ((x-p[0])**2 + p[1]**2)
 
+lw = 2
 nfig = 0
 ############# Figure: d(x, xi) vs x
 p = [0, 1, 1]
@@ -54,8 +56,8 @@ pl.clf()
 ymarg = 0.160
 xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-pl.plot(x,dx,'k-')
-pl.plot(xlim,[3,3],'b--')
+pl.plot(x,dx,'k-', linewidth=lw)
+pl.plot(xlim,[3,3],'b--', linewidth=lw)
 # pl.plot(xi[0,:],[3]*3, 'r.', markersize=12, label='Design points')
 pl.ylim([min(dx), 3.2])
 pl.xlabel(r'$x$')
@@ -101,7 +103,6 @@ i2 = interp1d(dx, f2, 'cubic')
 i3 = interp1d(dx, f3, 'cubic')
 
 xc = linspace(xlim[0], xlim[1], 501)
-lw = 2
 pl.plot(xc, i1(xc), 'k-', linewidth=lw, label=r'Uniform')
 pl.plot(xc, i2(xc), 'b-', linewidth=lw, label=r'$D$-optimal')
 pl.plot(xc, i3(xc), 'r-', linewidth=lw, label=r'$D_s$-optimal')
@@ -223,9 +224,9 @@ pl.clf()
 ymarg = 0.160
 xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-pl.plot(xdif, (det(M3)/res)**(1/3), 'k-', label='Optimal')
-pl.plot(xdif, (det(M3)/res2)**(1/3), 'r:', label='Sub-optimal')
-pl.plot([xdif[0], xdif[-1]], [1, 1], 'b--', label=r'Uniform')
+pl.plot(xdif, (det(M3)/res)**(1/3), 'k-', linewidth=lw, label='Optimal')
+pl.plot(xdif, (det(M3)/res2)**(1/3), 'r:', linewidth=lw, label='Sub-optimal')
+pl.plot([xdif[0], xdif[-1]], [1, 1], 'b--', linewidth=lw, label=r'Uniform')
 pl.ylim([0.5, 1.1])
 pl.xlim([xdif[0], xdif[-1]])
 pl.xlabel(r'$\Delta x_0$')
@@ -304,9 +305,9 @@ pl.clf()
 ymarg = 0.160
 xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-pl.plot(gdif, (det(M3)/res)**(1/3), 'k-', label='Optimal')
-pl.plot(gdif, (det(M3)/res2)**(1/3), 'r:', label='Sub-optimal')
-pl.plot([gdif[0], gdif[-1]], [1, 1], 'b--', label=r'Uniform')
+pl.plot(gdif, (det(M3)/res)**(1/3), 'k-', linewidth=lw, label='Optimal')
+pl.plot(gdif, (det(M3)/res2)**(1/3), 'r:', linewidth=lw, label='Sub-optimal')
+pl.plot([gdif[0], gdif[-1]], [1, 1], 'b--', linewidth=lw, label=r'Uniform')
 pl.ylim([0.5, 1.1])
 pl.xlim([gdif[0], gdif[-1]])
 pl.xlabel(r"$\Gamma'$")
@@ -328,11 +329,11 @@ p = [0, 1, 1]
 c = 0.05
 xlim = [-2, 2]
 
-xdif = linspace(0, 0.1, 61)
+xdif = linspace(0, 0.2, 61)
 res = array([])
 for xd in xdif:
-    w = 0.001
-    xi = array([[-0.576-xd, 0-xd, 0.576-xd], [1/2-w, w/2, 1/2-w]])
+    w = 0.01
+    xi = array([[-0.576-xd, 0-xd, 0.576-xd], [1/2-w/2, w, 1/2-w/2]])
     # xi = array([[-0.576-xd, 0.576-xd], [1/2, 1/2]])
     M1 = Mcontinuous(getf, p, xi)
     res = append(res, det(M1)/det(M1[1:,1:]))
@@ -382,9 +383,9 @@ pl.clf()
 ymarg = 0.160
 xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-pl.plot(xdif, (dM3/res), 'k-', label='Optimal')
-pl.plot(xdif, (dM3/res2), 'r:', label='Sub-optimal')
-pl.plot([xdif[0], xdif[-1]], [1, 1], 'b--', label=r'Uniform')
+pl.plot(xdif, (dM3/res), 'k-', linewidth=lw, label='Optimal')
+pl.plot(xdif, (dM3/res2), 'r:', linewidth=lw, label='Sub-optimal')
+pl.plot([xdif[0], xdif[-1]], [1, 1], 'b--', linewidth=lw, label=r'Uniform')
 pl.ylim([0, 1.1])
 pl.xlim([xdif[0], xdif[-1]])
 pl.xlabel(r'$\Delta x_0$')
@@ -437,8 +438,8 @@ xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
 
 
-pl.plot(xc, lorentz(p, xc), 'b-', linewidth=2)
-pl.plot(xc, gauss(pg, xc), 'g--', linewidth=2)
+pl.plot(xc, lorentz(p, xc), 'b-', linewidth=lw)
+pl.plot(xc, gauss(pg, xc), 'g--', linewidth=lw)
 xp = [-2.73, -0.96, 0, 0.96, 2.73]
 for xs in xp:
     pl.plot([xs, xs], [0, max(lorentz(p,xs), gauss(pg, xs))], 'k-')
@@ -489,8 +490,8 @@ pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
 xold = loadtxt('xout.txt')
 xold = xold[16:]
 pg = dofit(gauss, xold, lorentz(p, xold), p).beta
-pl.plot(xc, (lorentz(p, xc)-gauss(pg, xc))**2*1e3, 'k-')
-pl.plot([-3, 3], [7.4, 7.4], 'b--')
+pl.plot(xc, (lorentz(p, xc)-gauss(pg, xc))**2*1e3, 'k-', linewidth=lw)
+pl.plot([-3, 3], [7.4, 7.4], 'b--', linewidth=lw)
 pl.plot(xold, (lorentz(p, xold)-gauss(pg, xold))**2*1e3,  'rx', markersize=5)
 pl.xlabel(r'$x$')
 pl.ylabel(r'$\psi_2(x, \xi_N) (\times 10^{-3})$')
