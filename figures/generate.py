@@ -6,6 +6,7 @@ from __future__ import division
 from numpy import *
 import pylab as pl
 from scipy.odr import *
+from scipy.interpolate import interp1d
 from optimaldesign import *
 
 dlx0 = lambda p, x: 2*(x-p[0])*p[2]*p[1]/((x-p[0])**2+p[1]**2)**2
@@ -62,6 +63,58 @@ pl.ylabel(r'$d(x, \xi^*)$')
 # pl.legend(loc='lower center')
 nfig += 1
 pl.savefig('figure%d.eps' %nfig)
+
+#### Histograms
+fig_width_pt = 246.0  # Get this from LaTeX using \showthe\columnwidth
+inches_per_pt = 1.0/72.27               # Convert pt to inch
+golden_mean = (sqrt(5)-1.0)/2.0         # Aesthetic ratio
+fig_width = fig_width_pt*inches_per_pt  # width in inches
+fig_height = fig_width*golden_mean      # height in inches
+fig_size =  [fig_width,fig_height]
+params = {'backend': 'ps',
+          'axes.labelsize': 10,
+          'text.fontsize': 10,
+          'legend.fontsize': 10,
+          'xtick.labelsize': 8,
+          'ytick.labelsize': 8,
+          'text.usetex': True,
+          'figure.figsize': fig_size}
+pl.rcParams.update(params)
+pl.figure(1)
+pl.clf()
+ymarg = 0.160
+xmarg = 0.2
+pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
+data = loadtxt('histogram.txt')
+dx = data[:,0]
+h1 = data[:,1]
+h2 = data[:,2]
+h3 = data[:,3]
+hx = 0.03/60
+f1 = h1/sum(h1*hx)
+f2 = h2/sum(h1*hx)
+f3 = h3/sum(h1*hx)
+
+xlim = [0.000, 0.025]
+i1 = interp1d(dx, f1, 'cubic')
+i2 = interp1d(dx, f2, 'cubic')
+i3 = interp1d(dx, f3, 'cubic')
+
+xc = linspace(xlim[0], xlim[1], 501)
+lw = 2
+pl.plot(xc, i1(xc), 'k-', linewidth=lw, label=r'Uniform')
+pl.plot(xc, i2(xc), 'b-', linewidth=lw, label=r'$D$-optimal')
+pl.plot(xc, i3(xc), 'r-', linewidth=lw, label=r'$D_s$-optimal')
+pl.xlabel(r'$\sigma_{\hat x_0}$ fitting variance')
+pl.ylabel(r'Probability distribution')
+pl.xlim([0.005, 0.025])
+t = pl.text(0.020, 200, 'Uniform')
+t = pl.text(0.015, 280, r'$D$-optimal')
+t = pl.text(0.006, 150, r'$D_s$-optimal')
+# pl.show()
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
+
 
 ############# Figure: D_eff vs N
 p = [0, 1, 1]
