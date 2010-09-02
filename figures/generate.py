@@ -224,14 +224,14 @@ pl.clf()
 ymarg = 0.160
 xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-pl.plot(xdif, (det(M3)/res)**(1/3), 'k-', linewidth=lw, label='Optimal')
-pl.plot(xdif, (det(M3)/res2)**(1/3), 'r:', linewidth=lw, label='Sub-optimal')
+pl.plot(xdif, 1/(det(M3)/res)**(1/3), 'k-', linewidth=lw, label='Optimal')
+pl.plot(xdif, 1/(det(M3)/res2)**(1/3), 'r:', linewidth=lw, label='Sub-optimal')
 pl.plot([xdif[0], xdif[-1]], [1, 1], 'b--', linewidth=lw, label=r'Uniform')
-pl.ylim([0.5, 1.1])
+# pl.ylim([0.5, 1.1])
 pl.xlim([xdif[0], xdif[-1]])
 pl.xlabel(r'$\Delta x_0$')
 pl.ylabel(r'$D_\mathrm{eff}$')
-pl.legend(loc='upper left')
+pl.legend(loc='lower left')
 nfig += 1
 pl.savefig('figure%d.eps' %nfig)
 
@@ -305,10 +305,10 @@ pl.clf()
 ymarg = 0.160
 xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-pl.plot(gdif, (det(M3)/res)**(1/3), 'k-', linewidth=lw, label='Optimal')
-pl.plot(gdif, (det(M3)/res2)**(1/3), 'r:', linewidth=lw, label='Sub-optimal')
+pl.plot(gdif, 1/(det(M3)/res)**(1/3), 'k-', linewidth=lw, label='Optimal')
+pl.plot(gdif, 1/(det(M3)/res2)**(1/3), 'r:', linewidth=lw, label='Sub-optimal')
 pl.plot([gdif[0], gdif[-1]], [1, 1], 'b--', linewidth=lw, label=r'Uniform')
-pl.ylim([0.5, 1.1])
+# pl.ylim([0.5, 1.1])
 pl.xlim([gdif[0], gdif[-1]])
 pl.xlabel(r"$\Gamma'$")
 pl.ylabel(r'$D_\mathrm{eff}$')
@@ -383,14 +383,14 @@ pl.clf()
 ymarg = 0.160
 xmarg = 0.2
 pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-pl.plot(xdif, (dM3/res), 'k-', linewidth=lw, label='Optimal')
-pl.plot(xdif, (dM3/res2), 'r:', linewidth=lw, label='Sub-optimal')
+pl.plot(xdif, 1/(dM3/res), 'k-', linewidth=lw, label='Optimal')
+pl.plot(xdif, 1/(dM3/res2), 'r:', linewidth=lw, label='Sub-optimal')
 pl.plot([xdif[0], xdif[-1]], [1, 1], 'b--', linewidth=lw, label=r'Uniform')
-pl.ylim([0, 1.1])
+# pl.ylim([0, 1.1])
 pl.xlim([xdif[0], xdif[-1]])
 pl.xlabel(r'$\Delta x_0$')
 pl.ylabel(r'$D_\mathrm{eff}$')
-pl.legend(loc='lower right')
+# pl.legend(loc='lower right')
 # pl.show()
 nfig += 1
 pl.savefig('figure%d.eps' %nfig)
@@ -451,56 +451,6 @@ pl.ylabel(r'$\eta(x)$')
 nfig += 1
 pl.savefig('figure%d.eps' %nfig)
 
-# ############# Figure: Lorentz vs Gauss, residual
-
-lorentz = lambda p, x: p[2] * p[1] / ((x-p[0])**2 + p[1]**2)
-gauss = lambda p, x: p[2] / p[1] * exp( - (x-p[0])**2/(2*p[1]**2))
-
-p = 0, 1, 1
-xc = linspace(-3, 3, 301)
-
-def dofit(f, x, y, p0):
-    data = Data(x, y)
-    model = Model(f)
-    fit = ODR(data, model, p0)
-    fit.set_job(fit_type=2)
-    output = fit.run()
-    return output
-
-fig_width_pt = 246.0  # Get this from LaTeX using \showthe\columnwidth
-inches_per_pt = 1.0/72.27               # Convert pt to inch
-golden_mean = (sqrt(5)-1.0)/2.0         # Aesthetic ratio
-fig_width = fig_width_pt*inches_per_pt  # width in inches
-fig_height = fig_width*golden_mean      # height in inches
-fig_size =  [fig_width,fig_height]
-params = {'backend': 'ps',
-          'axes.labelsize': 10,
-          'text.fontsize': 10,
-          'legend.fontsize': 10,
-          'xtick.labelsize': 8,
-          'ytick.labelsize': 8,
-          'text.usetex': True,
-          'figure.figsize': fig_size}
-pl.rcParams.update(params)
-pl.figure(1)
-pl.clf()
-ymarg = 0.160
-xmarg = 0.2
-pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
-xold = loadtxt('xout.txt')
-xold = xold[16:]
-pg = dofit(gauss, xold, lorentz(p, xold), p).beta
-pl.plot(xc, (lorentz(p, xc)-gauss(pg, xc))**2*1e3, 'k-', linewidth=lw)
-pl.plot([-3, 3], [7.4, 7.4], 'b--', linewidth=lw)
-pl.plot(xold, (lorentz(p, xold)-gauss(pg, xold))**2*1e3,  'rx', markersize=5)
-pl.xlabel(r'$x$')
-pl.ylabel(r'$\psi_2(x, \xi_N) (\times 10^{-3})$')
-# pl.legend(loc='lower right')
-# pl.show()
-nfig += 1
-pl.savefig('figure%d.eps' %nfig)
-
-
 ############# Figure: Lorentz vs Gauss / efficiency
 
 lorentz = lambda p, x: p[2] * p[1] / ((x-p[0])**2 + p[1]**2)
@@ -552,6 +502,54 @@ pl.ylabel(r'$\Delta_2(\xi_N) / \Delta_2(\xi^*)$')
 nfig += 1
 pl.savefig('figure%d.eps' %nfig)
 
+# ############# Figure: Lorentz vs Gauss, residual
+
+lorentz = lambda p, x: p[2] * p[1] / ((x-p[0])**2 + p[1]**2)
+gauss = lambda p, x: p[2] / p[1] * exp( - (x-p[0])**2/(2*p[1]**2))
+
+p = 0, 1, 1
+xc = linspace(-3, 3, 301)
+
+def dofit(f, x, y, p0):
+    data = Data(x, y)
+    model = Model(f)
+    fit = ODR(data, model, p0)
+    fit.set_job(fit_type=2)
+    output = fit.run()
+    return output
+
+fig_width_pt = 246.0  # Get this from LaTeX using \showthe\columnwidth
+inches_per_pt = 1.0/72.27               # Convert pt to inch
+golden_mean = (sqrt(5)-1.0)/2.0         # Aesthetic ratio
+fig_width = fig_width_pt*inches_per_pt  # width in inches
+fig_height = fig_width*golden_mean      # height in inches
+fig_size =  [fig_width,fig_height]
+params = {'backend': 'ps',
+          'axes.labelsize': 10,
+          'text.fontsize': 10,
+          'legend.fontsize': 10,
+          'xtick.labelsize': 8,
+          'ytick.labelsize': 8,
+          'text.usetex': True,
+          'figure.figsize': fig_size}
+pl.rcParams.update(params)
+pl.figure(1)
+pl.clf()
+ymarg = 0.160
+xmarg = 0.2
+pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
+xold = loadtxt('xout.txt')
+xold = xold[16:]
+pg = dofit(gauss, xold, lorentz(p, xold), p).beta
+pl.plot(xc, (lorentz(p, xc)-gauss(pg, xc))**2*1e3, 'k-', linewidth=lw)
+pl.plot([-3, 3], [7.4, 7.4], 'b--', linewidth=lw)
+pl.plot(xold, (lorentz(p, xold)-gauss(pg, xold))**2*1e3,  'rx', markersize=5)
+pl.xlabel(r'$x$')
+pl.ylabel(r'$\psi_2(x, \xi_N) (\times 10^{-3})$')
+# pl.legend(loc='lower right')
+# pl.show()
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 
 
