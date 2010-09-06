@@ -17,11 +17,9 @@ dlc = lambda p, x: x*0+1
 
 def getf(p, x):
     return array([[dlx0(p, x)],[dlg(p,x)],[dla(p,x)]])
-    # return array([[dlg(p, x)],[dla(p,x)],[dlx0(p,x)]])
-    # return array([[dlx0(p, x)],[dlg(p,x)],[dla(p,x)], [dlc(p, x)]])
-    # return array([[dlx0(p, x)],[dlg(p,x)],[dla(p,x)]])
-    # return array([[dlg(p, x)],[dlx0(p,x)],[dla(p,x)]])
-    # return array([[dla(p, x)],[dlx0(p,x)],[dlg(p,x)]])
+
+def getf4(p, x):
+    return array([[dlx0(p, x)],[dlg(p,x)],[dla(p,x)], [dlc(p, x)]])
 
 lorentz = lambda p, x: p[2] * p[1] / ((x-p[0])**2 + p[1]**2)
 
@@ -317,6 +315,66 @@ pl.ylabel(r'$D_\mathrm{eff}$')
 nfig += 1
 pl.savefig('figure%d.eps' %nfig)
 
+
+
+############# Figure: Optimal uniform limits
+
+def uniform(x, pars):
+    prob = 1 / abs(pars[1] - pars[0])
+    return prob
+
+p = [0, 1, 1]
+res = array([])
+xlimr = linspace(0.1, 6, 101)
+numpar = len(getf(p, 0))
+for xl in xlimr:
+    xlim = [-xl, xl]
+    M3 = Mcontsub(getf, p, uniform, xlim, xlim)
+    res = append(res, det(M3)**(1/numpar))
+mm = argmax(res)
+print "Maximum at: %f" %(xlimr[mm])
+res = res/res[mm]
+
+p = [0, 1, 1, 0]
+res4 = array([])
+xlimr = linspace(0.1, 6, 101)
+numpar = len(getf(p, 0))
+for xl in xlimr:
+    xlim = [-xl, xl]
+    M3 = Mcontsub(getf4, p, uniform, xlim, xlim)
+    res4 = append(res4, det(M3)**(1/numpar))
+mm = argmax(res4)
+print "Maximum at: %f" %(xlimr[mm])
+res4 = res4/res4[mm]
+
+fig_width_pt = 246.0  # Get this from LaTeX using \showthe\columnwidth
+inches_per_pt = 1.0/72.27               # Convert pt to inch
+golden_mean = (sqrt(5)-1.0)/2.0         # Aesthetic ratio
+fig_width = fig_width_pt*inches_per_pt  # width in inches
+fig_height = fig_width*golden_mean      # height in inches
+fig_size =  [fig_width,fig_height]
+params = {'backend': 'ps',
+          'axes.labelsize': 10,
+          'text.fontsize': 10,
+          'legend.fontsize': 10,
+          'xtick.labelsize': 8,
+          'ytick.labelsize': 8,
+          'text.usetex': True,
+          'figure.figsize': fig_size}
+pl.rcParams.update(params)
+pl.figure(1)
+pl.clf()
+ymarg = 0.160
+xmarg = 0.2
+pl.axes([ymarg,xmarg,0.95-ymarg,0.95-xmarg])
+pl.plot(xlimr, res, 'k-', linewidth=lw, label='3-parameter')
+pl.plot(xlimr, res4, 'b--', linewidth=lw, label='4-parameter')
+pl.ylim([0, 1.1])
+pl.xlabel(r'$\pm x$ range')
+pl.ylabel(r'$D_\mathrm{eff}^{1/p}$ (a.u)')
+pl.legend(loc='lower right')
+nfig += 1
+pl.savefig('figure%d.eps' %nfig)
 
 
 ############# Figure: D_s optimum D_eff vs dx0
