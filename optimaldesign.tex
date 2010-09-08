@@ -4,9 +4,9 @@
 \usepackage{enumerate}
 \begin{document}
 \article[Optimal design methods for fitting experimental data]{TECHNICAL DESIGN NOTE}{Optimal design methods for fitting experimental data}
-%%\author{G Imreh and W-Y Cheng}
+\author{G Imreh and W-Y Cheng}
 \address{Institute of Atomic and Molecular Sciences, Academia Sinica, Taiwan}
-%%\ead{\mailto{imrehg@gmail.com}}
+\ead{\mailto{imrehg@gmail.com}}
 \begin{abstract}
 Experiments most commonly conducted by using uniformly distributed input parameters in the region of interest. The results of the experiment, however, can be optimized towards different goals, for example model parameter estimates with the smallest possible variance or best discrimination between competing model, by choosing non-uniform input distribution. This note introduces the theory of optimal design for fitting experimental data and gives examples of the practice.
 \end{abstract}
@@ -156,7 +156,7 @@ d(x, \xi^*) \leq p
 \end{equation}
 for $x \in \mathcal{X}$ with equivalence at the support points.
 
-\subsection{Finding the optimal design}
+\subsection{Practical optimal design}
 \label{sec:findoptimal}
 The General Equivalence Theorem implies that away from the optimum $\phi(x, \xi) < 0$. Then we can choose the measure $\bar \xi_k$ that puts unit mass at point $x_k$ as $\phi(x_k, \xi_k) < 0$, then
 \begin{equation}
@@ -184,6 +184,7 @@ which is an efficiency measure independent of the $p$ dimension of the model. Be
 
 An advantage of the $D$-optimality is that the optimum measure $\xi^*$ does not depend on the scale of the explanatory variables, linear transformations leave the $D$-optimum design unchanged.
 
+The optimal design theory can also help answer a different question: we might not be inclined to limit the measured input parameters to such a small number as it was shown above ($\approx p$), but want to keep a uniform distribution of the input. We can then tune the size of the design region $\mathcal{X}$ to maximise the information gained per measurement under these conditions. For example, if $\mathcal{X} = [\tilde x_1, \tilde x_2]$, the design function is $\xi(x) = 1/{|\tilde x_2 - \tilde x_1|}$ for $x \in \mathcal{X}$ and $0$ otherwise. The information matrix $M$ is readily calculated from \eref{eq:infcont} using this $\xi$ and optimum is achieved when $|M|^{1/p}$ is maximal.
 
 \subsection{Optimize for a subset of parameters}
 
@@ -227,7 +228,7 @@ where $\epsilon$ is small, but large enough to be able to invert $M_\epsilon$ (i
 
 Non-linear models cannot be expressed in the previous matrix formalism, but can be linearised to be able to use optimal design methods. If $\eta(x, \theta)$ is a non-linear function of $x$ with parameter $\theta$, Taylor expansion at the parameter estimate yields
 \begin{equation}
-E[Y] = \eta(x, \theta) = \eta(x, \hat \theta) + (\theta - \hat \theta) \frac{\partial \eta}{\partial \theta}(x, \theta)|(\theta = \hat \theta) + \ldots
+E[Y] = \eta(x, \theta) = \eta(x, \hat \theta) + (\theta - \hat \theta) \frac{\partial \eta}{\partial \theta}(x, \theta)|_{(\theta = \hat \theta)} + \ldots
 \end{equation}
 which is rewritten to emphasise the linear model as
 \begin{equation}
@@ -364,7 +365,7 @@ where the final ``$\ldots$'' represents the repeatition of the $0,-0.775,0.775$ 
 In the case when $\mathcal{X}$ is restricted it is possible that we have more than $p$ number of support for our final design and they won't have equal weights, thus a frequency analysis of the output of the sequential design algorithm is needed.
 If we want to compare the the efficiency of the usual uniformly distributed $x$ values to the design of \eref{eq:lorentzxi1} for the same number of measurements, we have to choose a limited region for the uniform distribution. With $\mathcal{X} = [-2, 2]$ the efficiency $D_\mathrm{eff} = 1.290$, thus the optimal design requires approximately $22.5\%$ less measurements ($1/1.290 = 0.775$) for the same level of accuracy. On $\mathcal{X} =[-3, 3]$, which is still a sensible range for a uniformly distributed measurement, $D_\mathrm{eff} = 1.825$.
 
-The optimal design theory can help us answer a different question as well, if we are not inclined to limit the measured input parameters to such a small number as it was shown previously, but want to keep a uniform distribution of the input. Then we can tune is the size of the design region $\mathcal{X} = [\tilde x_1, \tilde x_2]$ to maximise the information gained per measurement. Our model is symmetric over the centre, thus the optimal region can be described by a single number $\tilde x$ such as $\mathcal{X} = [-\tilde x, \tilde x]$. The design $\xi(\tilde x) = 1/{2 \tilde x}$ for $x \in \mathcal{X}$ and $0$ otherwise. The information matrix $M$ is readily calculated from \eref{eq:infcont} and optimum is achieved when $|M|^{1/p}$ is maximal, where $p$ is the number of parameters of the underlying model. For the 3-parameter Lorentzian function an example is shown on \fref{fig:optimaluniform}, with limit $\tilde x = 1.124$. If the measured interval of $x$ is smaller or larger, one needs more measurements to estimate the model parameters to the same accuracy.
+If we don't want to measure at only 3 different input values, we can optimize the choice of the design region for uniform distribution of the input as well. Our model is symmetric over the centre, thus the optimal region can be described by a single number $\tilde x$ such as $\mathcal{X} = [-\tilde x, \tilde x]$. The design $\xi(x) = 1/{2 \tilde x}$ for $x \in \mathcal{X}$ and $0$ otherwise. For the 3-parameter Lorentzian function an example is shown on \fref{fig:optimaluniform}, with limit $\tilde x = 1.124$. If the measured interval of $x$ is smaller or larger, one needs more measurements to estimate the model parameters to the same accuracy.
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure1.eps}
@@ -479,7 +480,7 @@ Compared to an uniform distribution on $\mathcal{X} = [-2,0]$ the efficiency is 
 \subsection{4-parameter with offset}
 \label{sec:4param}
 
-Our spectroscopy measurement might include a background (or cannot't subtract a known value from our measurements), thus the model of \eref{eq:lorentz3} needs to be extended:
+The measurement in our hypothetical experiment may include an offset, thus the model in \eref{eq:lorentz3} needs to be extended:
 \begin{equation}
 \eta(x) = I \frac{\Gamma}{(x - x_0)^2 + \Gamma^2} + \eta_0
 \label{eq:lorentz4}
@@ -503,7 +504,7 @@ For design region $\mathcal{X} = [-2, 2]$ the sequential algorithm results in de
     \frac{1}{8} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{8}\\
   \end{array} \right \}
 \end{equation}
-whic has now a higher number of support points than control parameters $p$. When checking this measure for $D$-optimality, however, the equality $d(x, \xi) = p$ still holds at all support points. Compared to the uniform distribution on the same interval, $D_\mathrm{eff} = 1.374$. If the design region is extended to $\mathcal{X} = [-3, 3]$ the optimal measure becomes
+which has now a higher number of support points than control parameters $p$. When checking this measure for $D$-optimality, however, the equality $d(x, \xi) = p$ still holds at all support points. Compared to the uniform distribution on the same interval, $D_\mathrm{eff} = 1.374$. If the design region is extended to $\mathcal{X} = [-3, 3]$ the optimal measure becomes
 \begin{equation}
 \xi^* = \left\{
   \begin{array}{c c c c c}
@@ -513,7 +514,7 @@ whic has now a higher number of support points than control parameters $p$. When
 \end{equation}
 with $D_\mathrm{eff} = 1.560$.
 
-\Fref{fig:optimaluniform} shows the result for the optimal design region for uniformly distributed $x$ input parameters (as described in \sref{seq:exopt}) in the case of this 4-parameter model. The calculation gives $\tilde x = 2.808$ for the model parameters listed. If the used input parameters come form just the middle region region (small $\tilde x$) the offset cannot be estimated very well, while with large region too small fraction of the measurements will fall into central area where one could observe the the Lorentzian response itself.
+\Fref{fig:optimaluniform} shows the result for the optimal design region for uniformly distributed $x$ input parameters (as described in \sref{seq:exopt}) in the case of this 4-parameter model, giving $\tilde x = 2.808$ for the model parameters listed. If the used input parameters come form just the middle region region (small $\tilde x$) the offset cannot be estimated very well, while with large region too small fraction of the measurements will fall into central area where one could observe the the Lorentzian response itself.
 
 \subsection{Discriminating Lorentzian and Gaussian}
 
@@ -547,7 +548,7 @@ With the optimal design $\Delta_2(\xi^*) \approx 7.3 \times 10^{-3}$, while a un
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=0.9\textwidth]{figure9.eps}
+\includegraphics[width=0.9\textwidth]{figure10.eps}
 \caption{The derivative function $\psi(x, \xi_N)$ of the $T$-optimal design for discriminating a Lorentzian function from a Gaussian in the same setting as in \fref{fig:lorgauss}. The crosses show the support points generated by the sequential algorithm, with the first 20 (non-optimal, converging points) thrown away. Dashed line is the $\Delta_2(\xi^*)$ residual sum of squares at the optimal design.}
 \label{fig:topt}
 \end{figure}
@@ -558,10 +559,7 @@ With the optimal design $\Delta_2(\xi^*) \approx 7.3 \times 10^{-3}$, while a un
 
 Optimal design methods have their pitfalls but con produce real gains, as the previous section has shown.  Most gain is achieved when the model parameters are relatively well known, but need to be measured to the best accuracy given the amount of time or effort available, or when close models need to be discriminated. In the experiments one can use a small fraction of time uniformly distributed input to measure the response of the system roughly (e.g. $\sqrt{n}$ trials out of the total of $n$), then carry on for the rest of the time using the optimal design based on those estimates. Alternatively theoretical prediction of the model parameters can be used, if the uncertainly of those predictions is less than how much uncertainty the optimal design allows. If there are systematic effects (e.g. parameter drift), they can have could have more complicated effect on the results with the optimised input. The methods shown in this note most of the time does not replace the use normal experimental procedures but augment them.
 
-
-\ack The research is funded by the National Science Council of Taiwan.
-
-
+The research reported in this note is supported by the National Science Council of Taiwan under the grant number NSC099-2811-M-001-094.
 
 \section*{References}
 \bibliographystyle{unsrt}
