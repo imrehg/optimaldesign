@@ -2,8 +2,9 @@
 \usepackage{iopams}
 \usepackage{graphicx}
 \usepackage{enumerate}
+\usepackage[colorlinks,linkcolor=blue,citecolor=red,urlcolor=blue]{hyperref}
 \begin{document}
-\article[Optimal design methods for fitting experimental data]{TECHNICAL DESIGN NOTE}{Optimal design methods for fitting experimental data}
+\article[Optimal design methods]{TECHNICAL DESIGN NOTE}{Optimal design methods for fitting experimental data}
 \author{G Imreh and W-Y Cheng}
 \address{Institute of Atomic and Molecular Sciences, Academia Sinica, Taiwan}
 \ead{\mailto{imrehg@gmail.com}}
@@ -14,7 +15,7 @@ Experiments most commonly conducted by using uniformly distributed input paramet
 \noindent{\it Keywords\/}: optimal experiment design, regression analysis
 
 \pacs{02.10.Ud, 02.50.Tt, 06.20.Dk}
-%%\submitto{\MST}
+\submitto{\MST}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Theory
@@ -23,7 +24,7 @@ Experiments most commonly conducted by using uniformly distributed input paramet
 
 Physics experiments are most commonly done by describing physical process by a mathematical model, repeated observations are used to evaluate the validity of that model and estimate its free parameters. When designing an experiment, the usual aims are the ability to estimate the model parameters without bias and as well as possible, ability to discriminate between different models, and to use the fewest possible number of observations \cite{Box1975,Box1987}. It is commonly known by researchers that these aims are connected, e.g. in general more observations result in better parameter estimates. As this note will show, however, it is possible to improve the experimental procedure to reduce such trade-offs, thus e.g improve the accuracy of parameter estimates without the change in the number of observations.
 
-The possible input parameters of an experiment form the $\mathcal{X}$ design region. From $\mathcal{X}$ one chooses $N$ points $x_i$, $i = 1, \ldots, N$ to conduct the experiment. Using optimal experimental design (OED) theory, with different choices of $x_i$ one can adjust the outcome towards different goals, e.g. overall best estimate of the model parameters, best estimate (smallest variance) of a subset of important parameters at the expense of others, most sensitive lack-of-fit measure. The list is by no means exhaustive, but represent the most common cases in physics. Most researchers spread the observations uniformly in the region of interest, which is often not the most powerful method to achieve any of these goals. OED is a rich area of statistics, so far mostly used in medical research and industrial quality control, mainly due to those fields close connection to statistics, not because of the lack relevance to other fields. There were previous efforts to use OED for physics, such as optimal measurement of processes described by differential equations, e.g. the placement of temperature sensors in heat conductivity experiments \cite{Emery1998}. Here we introduce the methodology of OED for model parameter estimation (fitting), examine its suitability for physical experiments and give examples to help implementation.
+The possible input parameters of an experiment form the $\mathcal{X}$ design region. From $\mathcal{X}$ one chooses $N$ points $x_i$, $i = 1, \ldots, N$ to conduct the experiment. Using optimal experimental design (OED) theory, with different choices of $x_i$ one can adjust the outcome towards different goals, e.g. overall best estimate of the model parameters, best estimate (smallest variance) of a subset of important parameters at the expense of others, most sensitive lack-of-fit measure. The list is by no means exhaustive, but represent the most common cases in physics. Most researchers spread the observations uniformly in the region of interest, which is often not the most powerful method to achieve any of these goals. OED is a rich area of statistics, so far mostly used in medical research (e.g. \cite{Berry1989}) and industrial quality control (often called ``Taguchi methods" \cite{Roy1990}), mainly due to those fields close connection to statistics, not because of the lack relevance to other fields. There were previous efforts to use OED for physics, such as optimal measurement of processes described by differential equations, e.g. the placement of temperature sensors in heat conductivity experiments \cite{Emery1998}. Here we introduce the methodology of OED for model parameter estimation (fitting), examine its suitability for physical experiments and give examples to help implementation.
 
 
 \section{Optimal design}
@@ -168,7 +169,7 @@ According to \eref{eq:phicond}, in the case of $D$-optimal design, the $x_k$ tha
 \item throw away non-optimal starting points
 \item the distribution of $x_i$ will suggest the support points and their relative weights for the optimal measure $\xi^*$
 \end{enumerate}
-There are other numerical methods finding $\xi^*$, examples can be find in \ref{} and the references within.
+There are other numerical methods finding $\xi^*$, examples can be found in \cite{Atkinson1992,Silvey1980} and the references within.
 
 Regardless of the optimization method, the provisional $\xi^*$ should be verified by checking that $d(x, \xi_{n}) \lesssim p$ over the whole $\mathcal{X}$. Also, it can be shown that if $\mathcal{X} = \mathbb{R}^m$ then $\xi^*$ has $p$ support points with equal weights. If $\mathcal{X} \subsetneq \mathbb{R}^m$ the number of support points $n \geq p$ and might have unequal weights.
 
@@ -230,7 +231,7 @@ which is rewritten to emphasise the linear model as
 \begin{equation}
 E[y] - \eta(x, \hat \theta) = f^T(x) \beta 
 \end{equation}
-where $\beta = \theta - \hat \theta$. It is straightforward to extend the linearization to vector-parameters and to higher order Taylor-terms if needed.
+where $\beta = \theta - \hat \theta$. It is straightforward to extend the linearisation to vector-parameters and to higher order Taylor-terms if needed.
 
 A complication with non-linear models is that many times the information matrix $F(x)$ will be also a function of the parameter estimate $\hat \theta$, thus the optimal design $\xi$ is truly optimal only for a given set of parameters. One then have to evaluate the robustness of the parameter estimation for a given model and $\xi$ by calculating the change in $D_\mathrm{eff}$ as a function of the misspecified model parameters.
 
@@ -241,7 +242,7 @@ If more robustness is required, we can still follow the optimal design ideas to 
 \end{equation}
 Using a finite $\sigma$ in the measure $\xi$ while keeping the original support points will improve robustness with reduce efficiency. 
 
-Under $D_s$-optimality the number of support points $n$ can be smaller than the $p$ parameters of the full model (the only requirement is $n \geq s$). Design is likely to be not robust, i.e. the estimates of the parameters can have large variations if $\hat \theta$ is misspecified. Some robustness can be achieved at the expence of efficiency by reintroducing support points with small weights near the support points that are present in the $D$-optimal design but missing in the $D_s$-optimal case. \Sref{seq:exopt} and \sref{seq:exopts} contain example analysis of robustness.
+Under $D_s$-optimality the number of support points $n$ can be smaller than the $p$ parameters of the full model (the only requirement is $n \geq s$). Design is likely to be not robust, i.e. the estimates of the parameters can have large variations if $\hat \theta$ is misspecified. Some robustness can be achieved at the expense of efficiency by reintroducing support points with small weights near the support points that are present in the $D$-optimal design but missing in the $D_s$-optimal case. \Sref{seq:exopt} and \sref{seq:exopts} contain example analysis of robustness.
 
 \subsection{Non-uniform error variance}
 
@@ -307,7 +308,7 @@ In this hypothetical experiment we are trying to measure the a physical system w
 \eta(x) = I \frac{\Gamma}{(x - x_0)^2 + \Gamma^2}
 \label{eq:lorentz3}
 \end{equation}
-where $I$ is the height of the peak, $x_0$ is the profile centre and $\Gamma$ is the half-with at half maximum. The partial derivatives for the Taylor-expanson are
+where $I$ is the height of the peak, $x_0$ is the profile centre and $\Gamma$ is the half-with at half maximum. The partial derivatives for the Taylor-expansion are
 \begin{eqnarray}
 \frac{\partial \eta(x)}{\partial x_0} &=& I \frac{2 \Gamma (x - x_0)}{\left[(x - x_0)^2 + \Gamma^2\right]^2} \\
 \frac{\partial \eta(x)}{\partial \Gamma} &=& I \frac{(x - x_0)^2 - \Gamma^2}{\left[(x - x_0)^2 + \Gamma^2\right]^2} \\
@@ -346,7 +347,7 @@ The model parameters are set to $\hat x_0 = 0$, $\hat \Gamma = 1$, $\hat I = 1$,
     \frac{1}{3} & \frac{1}{3} & \frac{1}{3}\\
   \end{array} \right \}
 \end{equation}
-based on that our original function is symmetric with respect to 0 (hence $-a$ and $a$) and $\mathcal{X}~=~\mathbb{R}$ (thus the number of design points equal the dimension of $\beta$, with equal weights). We can calculate the information matrix $M$ using this $\xi$ as in \eref{eq:infcont}, the maximum of the determinant is then found by differentiating with respect to $a$ and finding the derivative's roots. The calculation is straightforward but lengthy, thus we only quote the result of $a~\approx~0.7746$. This analytical method is cumbersome except for the simplest models (even with the available symbolic mathematics software \cite{symmat}). On the other hand, the sequential method of finding the correct parameters is much less intensive computationally. Our initial guess is $x = [-1, 0, 1]$, which is symmetric and equal probability, though any other $n \geq 3$ number for which $M$ is suitable starting point. The application of the sequential algorithm will then yield the following sequence of design support points:
+based on that our original function is symmetric with respect to 0 (hence $-a$ and $a$) and $\mathcal{X}~=~\mathbb{R}$ (thus the number of design points equal the dimension of $\beta$, with equal weights). We can calculate the information matrix $M$ using this $\xi$ as in \eref{eq:infcont}, the maximum of the determinant is then found by differentiating with respect to $a$ and finding the derivative's roots. The calculation is straightforward but lengthy, thus we only quote the result of $a~\approx~0.7746$. This analytical method is cumbersome except for the simplest models (even with the available symbolic mathematics software \cite{symmath}). On the other hand, the sequential method of finding the correct parameters is much less intensive computationally. Our initial guess is $x = [-1, 0, 1]$, which is symmetric and equal probability, though any other $n \geq 3$ number for which $M$ is suitable starting point. The application of the sequential algorithm will then yield the following sequence of design support points:
 \begin{equation}
     -1, 0, 1, 0.577, -0.577, 0, -0.789,\ldots,0,-0.775,0.775,\ldots
 \label{eq:l3seq}
@@ -367,37 +368,37 @@ If one does not want to limit the number of input values to 3 but keep the unifo
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure1.eps}
-\caption{The standardized variance $d(x, \xi^*)$ at the $D$-optimal design for a Lorentzian function with parameters $x_0=0$, $\Gamma = 1$, $A = 1$, see \sref{seq:exopt}. The dashed line is equal to the $p$ number of parameters of the model which is the limit for $d(x, \xi)$ in case of $D$-optimality. The support points are when the two lines intersect.}
+\caption{The standardized variance $d(x, \xi^*)$ of the $D$-optimal design for a Lorentzian function with parameters $x_0=0$, $\Gamma = 1$, $A = 1$. The dashed line is equal to the $p$ number of parameters of the model. The support points are when the two lines intersect.}
 \label{fig:lorentz3d}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure2.eps}
-\caption{Least-square fitted variance of the parameter $x_0$ for a Lorentzian with parameters $x_0=0$, $\Gamma = 1$, $A = 1$, added error with $\sigma=0.1$, and $n=201$ points distributed as: 1) uniformly over the [-3, 3] interval, 2) according to the $D$-optimal design of {eq:lorentzxi1}, 3) $D_s$-optimal design for $x_0$ with $\epsilon = 0.025$ in \eref{eq:dsx0robust}.}
+\caption{Distribution of variance estimates of the least-square fitted parameter $\hat x_0$ for a simulated Lorentzian profile with parameters $x_0=0$, $\Gamma = 1$, $A = 1$. An error term was added with $\sigma=0.1$. For the simulation $n=201$ points were distributed as: 1) uniformly over the [-3, 3] interval, 2) according to the $D$-optimal design of \eref{eq:lorentzxi1}, 3) $D_s$-optimal design for $x_0$ with $\epsilon = 0.025$ in \eref{eq:dsx0robust}.}
 \label{fig:simvariance}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure3.eps}
-\caption{Efficiency of the sequential algorithm shown in \eref{eq:l3seq} as a function of the $N$ number of steps, compared to the continuous optimal design of \eref{eq:lorentzxi1}.}
+\caption{The convergence of the sequential algorithm shown in \eref{eq:l3seq} to the $D$-optimal design \eref{eq:lorentzxi1} as a function of the $N$ number of steps.}
 \label{fig:xinefficiency}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure4.eps}
-\caption{Robustness of the $D$-optimal design \eref{eq:lorentzxi1}. The efficiency is compared to the uniform distribution over the interval $x\in [-3,3]$ as a function $\Delta x_0$ misspecification of the centre position. The shown sub-optimal design is generated using \eref{eq:deltafinite} with $\epsilon = 0.4$.}
+\caption{Robustness of the $D$-optimal design \eref{eq:lorentzxi1}. The efficiency is compared to the uniform distribution over the interval $x\in [-3,3]$ as a function $\Delta x_0$ misspecification of the centre position. The sub-optimal design is \eref{eq:deltafinite} with $\epsilon = 0.4$.}
 \label{fig:x0robust}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure5.eps}
-\caption{Robustness of the $D$-optimal design \eref{eq:lorentzxi1}. The efficiency is compared to the uniform distribution over the interval $x\in [-3,3]$ as a function $\Gamma'$ true linewidth when the optimal design is generated with $\hat \Gamma = 1$. The sub-optimal design used $\epsilon = 0.4$. Legend the same as on \fref{fig:x0robust}.}
+\caption{Robustness of the $D$-optimal design \eref{eq:lorentzxi1}. The efficiency is compared to the uniform distribution over the interval $x\in [-3,3]$ as a function $\Gamma'$ true linewidth when the optimal design is generated with $\hat \Gamma = 1$. The sub-optimal design used $\epsilon = 0.4$. Legend is the same as on \fref{fig:x0robust}.}
 \label{fig:grobust}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure6.eps}
-\caption{Optimizing the uniform distribution of $x$ for a Lorentzian model with parameters $x_0=0$, $\Gamma = 1$, $A = 1$ in case of the 3-parameter version (as in \sref{seq:exopt}), and the same with an arbitrary vertical offset in case of the 4-parameter model (as in \sref{sec:4param}). The limit of the design region $\mathcal{X} \in [-\tilde x, \tilde x]$ is shown on the horizontal axis.}
+\caption{Optimizing the uniform distribution of $x$ for a Lorentzian model with parameters $x_0=0$, $\Gamma = 1$, $A = 1$ in case of the 3-parameter version (as in \sref{seq:exopt}), and the same with an arbitrary vertical offset in case of the 4-parameter model (as in \sref{sec:4param}). The design region is $\mathcal{X} \in [-\tilde x, \tilde x]$.}
 \label{fig:optimaluniform}
 \end{figure}
 
@@ -413,7 +414,7 @@ Using $D_s$-optimality the estimation of any of the three parameters of the mode
     \frac{1}{2} & \frac{1}{2}\\
   \end{array} \right \}
 \end{equation}
-which has fewer number of points than the original model, thus while the centre is obviously measurable, the width and hight is not observable anymore.  On $\mathcal{X} = [-2,2]$ the efficiency is $D_\mathrm{eff} = 2.227$ compared to the uniform distribution. As the this design has fewer support points than the original model it is not very robust agains the misspecification of $\hat x_0$. To improve robustness based on comparison with the $D$-optimal design we can insert a support point at $x=0$:
+which has fewer number of points than the original model, thus while the centre is obviously measurable, the width and hight is not observable any longer.  On $\mathcal{X} = [-2,2]$ the efficiency is $D_\mathrm{eff} = 2.227$ compared to the uniform distribution. As the this design has fewer support points than the original model it is not very robust against the misspecification of $\hat x_0$. To improve robustness based on comparison with the $D$-optimal design we can insert a support point at $x=0$:
 \begin{equation}
 \xi^*_{x_0} = \left\{
   \begin{array}{c c c}
@@ -426,11 +427,9 @@ where $\epsilon$ is small and depends on the uncertainty of the \textit{a priori
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure7.eps}
-\caption{Robustness of the $D_s$-optimal design for $x_0$, shown in \eref{eq:dsx0robust}, using $\epsilon = 0.01$. The efficiency is compared to the uniform distribution over the interval $x\in [-2,2]$ as a function $\Delta x_0$ misspecification of the centre position. The sub-optimal design used $\epsilon = 0.15$. Legend the same as on \fref{fig:x0robust}.}
+\caption{Robustness of the $D_s$-optimal design for $x_0$ \eref{eq:dsx0robust}. The efficiency is compared to the uniform distribution over the interval $x\in [-2,2]$ as a function $\Delta x_0$ misspecification of the centre position. The optimal had $\epsilon = 0.01$, the sub-optimal design $\sigma = 0.15$. Legend is the same as on \fref{fig:x0robust}.}
 \label{fig:dsx0robust}
 \end{figure}
-
-
 
 Optimization for the $\Gamma$ width yields
 \begin{equation}
@@ -512,24 +511,24 @@ with $D_\mathrm{eff} = 1.560$.
 
 \Fref{fig:optimaluniform} shows the optimal design region for uniformly distributed $x$ input parameters (as described in \sref{seq:exopt}) in the case of this 4-parameter model, giving $\tilde x = 2.808$ for the model parameters listed. If the used input parameters come form just the middle region region (small $\tilde x$) the offset cannot be estimated very well, while with large region too small fraction of the measurements will fall into central area where the Lorentzian response is observable.
 
-\subsection{Discriminating between Lorentzian and Gaussian}
+\subsection{Discriminating between Lorentzian and Gaussian profiles}
 
-As an example for $T-optimal$ design for model selection, let's try to discriminate between a Lorentzian response (with the functional form of \eref{eq:lorentz3}) and a Gaussian function,
+As an example for $T$-optimal design for model selection, let's try to discriminate between a Lorentzian response defined by \eref{eq:lorentz3}) and a Gaussian function as
 \begin{equation}
 \eta_G(x) = \frac{A}{\sigma} \exp\left(-\frac{(x-x_0)^2}{2 \sigma^2}\right)
 \label{eq:gauss}
 \end{equation}
-where $A$ is the height, $\sigma$ is the half-width, and $x_0$ is the centre position. In this setting the two models differ in 4 parameters ($I$ and $\Gamma$ for the Lorentzian function, $A$ and $\sigma$ for the Gaussian), suggesting that the optimal design will have $4+1=5$ point support. For the example assume that the true distribution is a Lorentzian with $x_0 = 0$, $\Gamma = 1$  and $I = 1$. From a starting series of $[-2, -1, 0, 1, 2]$ the sequential algorithm results in a measure
+where $A$ is the height, $\sigma$ is the half-width, and $x_0$ is the profile centre. In this setting the two models differ in 4 parameters ($I$ and $A$ heights, and $\Gamma$ and $\sigma$ widths), suggesting that the optimal design will have $4+1=5$ point support. For this example assume that the true distribution is a Lorentzian with $x_0 = 0$, $\Gamma = 1$  and $I = 1$. From an arbitrary starting series of $[-2, -1, 0, 1, 2]$ the sequential algorithm results in a measure
 \begin{equation}
 \xi^* \approx \left\{
   \begin{array}{c c c c c}
     -2.74 & -0.96 & 0 & 0.96 & 2.73\\
     0.301 & 0.126 & 0.146 & 0.126 & 0.301\\
-  \end{array} \right \}
+  \end{array} \right \}.
 \label{eq:lorgauss}
 \end{equation}
-where the approximate equivalence means that the optimal measure is seen to be very sensitive to the support points and their weights, and \eref{eq:lorgauss} should be close as close to the optimal solution as it is possible with limited $N$ trials. \Fref{fig:lorgauss} shows the Lorentzian, the best fitting Gaussian and the support points of \eref{eq:lorgauss}. The convergence to within 95\% of the optimal $\Delta_2$ is achieved to $N \approx 40$ (see \fref{fig:toptconvergence}), and the the design will have derivative function as shown in \fref{fig:topt}.
-With the optimal design $\Delta_2(\xi^*) \approx 7.3 \times 10^{-3}$, while a uniform distribution on $\mathcal{X} = [-3, 3]$ has $\Delta_2(\xi) \approx 4.0 \times 10^{-3}$, thus the optimal design increases the difference between the two models almost twice as much for every additional observation.
+The approximate equivalence sign means, that the values come from frequency analysis of a large (but finite) output of the algorithm. \Fref{fig:lorgauss} shows the Lorentzian, the best fitting Gaussian and the support points \eref{eq:lorgauss}. The support coincides with the input points where the difference between the shapes of  the two functions is maximal. The sequential algorithm converges to within 5\% of the optimal $\Delta_2$ in about 40  iterations (see \fref{fig:toptconvergence}), and the the design will have derivative function as shown in \fref{fig:topt}.
+In case of the optimal design $\Delta_2(\xi^*) \approx 7.3 \times 10^{-3}$, while a uniform distribution on $\mathcal{X} = [-3, 3]$ has $\Delta_2(\xi) \approx 4.0 \times 10^{-3}$, thus the optimal design increases the difference between the two models almost twice as much for each additional observation.
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{figure8.eps}
@@ -551,13 +550,59 @@ With the optimal design $\Delta_2(\xi^*) \approx 7.3 \times 10^{-3}$, while a un
 
 
 
-\section{In the lab}
+\section{Putting in practice}
 
-Optimal design methods have their pitfalls but con produce real gains, as the previous section has shown.  Most gain is achieved when the model parameters are relatively well known, but need to be measured to the best accuracy given the amount of time or effort available, or when close models need to be discriminated. In the experiments one can use a small fraction of time uniformly distributed input to measure the response of the system roughly (e.g. $\sqrt{n}$ trials out of the total of $n$), then carry on for the rest of the time using the optimal design based on those estimates. Alternatively theoretical prediction of the model parameters can be used, if the uncertainly of those predictions is less than how much uncertainty the optimal design allows. If there are systematic effects (e.g. parameter drift), they can have could have more complicated effect on the results with the optimised input. The methods shown in this note most of the time does not replace the use normal experimental procedures but augment them.
+Optimal design methods have their pitfalls but under the right conditions do improve efficiency. Most gain is achieved when the model parameters are relatively well known, but need to be measured to the best accuracy given the amount of time or effort available. The methods in this note should provide guidance but certain choices (e.g. the results from the$D$- or $D_s$-optimal analysis, methods of improving robustness) have to be made on a case-by-case basis for different models and experimental conditions (noise level, uncertainties). In experiments one can use a fraction of time uniformly distributed input to measure the response of the system roughly, then carry on for the rest of the time using the optimal design based on those estimates. Alternatively, theoretical prediction of the model parameters can be used, if the uncertainly of those predictions is less than how much precision the given design requires. Dealing with systematic effects (e.g. parameter shift during the course of the experiment) is the same as for other measurement methods, but detecting systematic effects might be more complicated in $D$-optimal case due the reduced number of different input parameters. The methods described in this note most of the time does not replace the use normal experimental procedures but augment them.
 
 The research reported in this note is supported by the National Science Council of Taiwan under the grant number NSC099-2811-M-001-094.
 
 \section*{References}
-\bibliographystyle{unsrt}
-\bibliography{optimal}
+%\bibliographystyle{unsrt}
+%\bibliography{optimal}
+
+%% Final bibliography
+\begin{thebibliography}{1}
+
+\bibitem{Box1975}
+George E.~P. Box and Norman~R. Draper.
+\newblock {Robust designs}.
+\newblock {\em Biometrika}, 62(2):347--352, 1975.
+
+\bibitem{Box1987}
+G.~E.~P. Box and N.~R. Draper.
+\newblock {\em Empirical model building and response surfaces}.
+\newblock Wiley, 1987.
+
+\bibitem{Berry1989}
+D.~A. Berry, editor.
+\newblock {\em Statistical Methodology in the Pharmaceutical Sciences}.
+\newblock Statistics: A Series of Textbooks and Monographs. CRC Press, 1989.
+
+\bibitem{Roy1990}
+Ranjit Roy.
+\newblock {\em A primer on the Taguchi method}.
+\newblock Society of Manufacturing Engineers, 1990.
+
+\bibitem{Emery1998}
+A~F Emery and Aleksey~V Nenarokomov.
+\newblock Optimal experiment design.
+\newblock {\em Measurement Science and Technology}, 9(6):864, 1998.
+
+\bibitem{Atkinson1992}
+A.~C. Atkinson and A.~N. Donev.
+\newblock {\em Optimum Experimental Design}.
+\newblock Oxford Statistical Science Series. Oxford University Press, 1992.
+
+\bibitem{Silvey1980}
+Samuel~David Silvey.
+\newblock {\em Optimal Design}.
+\newblock Monographs on applied probability and statistics. Chapman and Hall,
+  1980.
+
+\bibitem{symmath}
+Examples include Matlab \url{http://www.mathworks.com/}, Mathematica \url{http://www.wolfram.com/} or the open source Sympy \url{http://code.google.com/p/sympy/}.
+
+\end{thebibliography}
+
+
 \end{document}
